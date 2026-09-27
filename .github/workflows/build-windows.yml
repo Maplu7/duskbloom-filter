@@ -1,0 +1,100 @@
+name: Build DuskBloom Center for Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "Center/**"
+      - "Bundled/**"
+      - "requirements.txt"
+      - "version.json"
+      - ".github/workflows/build-windows.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Build DuskBloom Center
+    runs-on: windows-latest
+
+    steps:
+      - name: Get DuskBloom Center
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        shell: powershell
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build DuskBloom Center
+        shell: powershell
+        run: |
+          pyinstaller `
+            --noconfirm `
+            --clean `
+            --windowed `
+            --onedir `
+            --name "DuskBloomCenter" `
+            Center/DuskBloomCenter.py
+
+      - name: Add bundled DuskBloom apps
+        shell: powershell
+        run: |
+          if (Test-Path "Bundled") {
+            Copy-Item `
+              -Path "Bundled" `
+              -Destination "dist/DuskBloomCenter/Bundled" `
+              -Recurse `
+              -Force
+          }
+
+          if (Test-Path "update_catalog.json") {
+            Copy-Item `
+              "update_catalog.json" `
+              "dist/DuskBloomCenter/update_catalog.json" `
+              -Force
+          }
+
+          if (Test-Path "version.json") {
+            Copy-Item `
+              "version.json" `
+              "dist/DuskBloomCenter/version.json" `
+              -Force
+          }
+
+      - name: Verify Center build
+        shell: powershell
+        run: |
+          if (!(Test-Path "dist/DuskBloomCenter/DuskBloomCenter.exe")) {
+            Write-Error "DuskBloomCenter.exe was not created."
+            exit 1
+          }
+
+          Write-Host "DuskBloom Center built successfully!"
+          Get-ChildItem "dist/DuskBloomCenter"
+
+      - name: Package DuskBloom Center
+        shell: powershell
+        run: |
+          Compress-Archive `
+            -Path "dist/DuskBloomCenter/*" `
+            -DestinationPath "DuskBloomCenter-Windows-x64.zip" `
+            -Force
+
+      - name: Upload DuskBloom Center
+        uses: actions/upload-artifact@v5
+        with:
+          name: DuskBloomCenter-Windows-x64
+          path: DuskBloomCenter-Windows-x64.zip
+          if-no-files-found: error
