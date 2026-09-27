@@ -1,0 +1,7 @@
+DuskBloom Center v1.0.3
+
+Build fix:
+- Builds into release_v103 instead of overwriting the old dist folder.
+- Avoids Windows file-lock failures from an older running/locked Center build.
+- Keeps Screen 3.4.4, Web 1.1, and Sonar 15.2 bundled.
+- Keeps existing app detection in %LOCALAPPDATA%\DuskBloom\Apps.

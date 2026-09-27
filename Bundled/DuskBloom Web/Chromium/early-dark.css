@@ -1,0 +1,3 @@
+
+html, body { background-color:#08080c !important; }
+@media (prefers-color-scheme: dark) { :root { color-scheme:dark; } }
