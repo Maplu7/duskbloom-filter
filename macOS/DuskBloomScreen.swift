@@ -81,7 +81,7 @@ final class AppDelegate:NSObject,NSApplicationDelegate {
    CFNotificationCenterGetDarwinNotifyCenter(),
    Unmanaged.passUnretained(self).toOpaque(),
    dashboardDarwinCallback,
-   CFNotificationName(dashboardDarwinName),
+   dashboardDarwinName,
    nil,
    .deliverImmediately
   )
