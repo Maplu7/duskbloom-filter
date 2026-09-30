@@ -33,6 +33,14 @@ PLIST
 make_app "DuskBloom Screen" "macOS/DuskBloomScreen.swift" -framework Cocoa
 make_app "DuskBloom Center" "macOS/DuskBloomCenter.swift" -framework Cocoa
 make_app "DuskBloom Reader" "macOS/DuskBloomReader.swift" -framework Cocoa -framework PDFKit
+# Ad-hoc sign the completed native app bundles for local macOS testing.
+# This does not replace Developer ID notarization, but it prevents shipping
+# structurally unsigned bundles from GitHub Actions.
+for APP in "DuskBloom Screen" "DuskBloom Center" "DuskBloom Reader"; do
+  codesign --force --deep --sign - "$OUT/$APP.app"
+  codesign --verify --deep --strict --verbose=2 "$OUT/$APP.app"
+done
+
 cp -R "Bundled/DuskBloom Web/Firefox-Zen" "$OUT/DuskBloom Web for Zen"
 cat > "$OUT/START HERE.txt" <<'TXT'
 DUSKBLOOM FOR MAC
