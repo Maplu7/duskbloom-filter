@@ -12,9 +12,9 @@ let presets:[Preset] = [
 final class OverlayWindow:NSWindow {
     init(screen:NSScreen) {
         super.init(contentRect:screen.frame,styleMask:.borderless,backing:.buffered,defer:false)
-        isOpaque=false; backgroundColor=.clear; ignoresMouseEvents=true; hasShadow=false
-        level=NSWindow.Level(rawValue:Int(CGWindowLevelForKey(.screenSaverWindow))+1)
-        collectionBehavior=[.canJoinAllSpaces,.stationary,.ignoresCycle,.fullScreenAuxiliary]
+        isOpaque = false; backgroundColor = .clear; ignoresMouseEvents = true; hasShadow = false
+        level = NSWindow.Level(rawValue:Int(CGWindowLevelForKey(.screenSaverWindow))+1)
+        collectionBehavior = [.canJoinAllSpaces,.stationary,.ignoresCycle,.fullScreenAuxiliary]
         orderFrontRegardless()
     }
     func apply(_ color:NSColor,_ alpha:CGFloat,_ enabled:Bool) {
