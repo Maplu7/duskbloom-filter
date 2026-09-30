@@ -1361,3 +1361,179 @@ const KEY=`mf44:${location.hostname}`;
     if (msg?.type === "MF44_SET") sync(msg.settings || {enabled:true});
   });
 })();
+
+
+/* ============================================================
+   V55 — CANVAS COHERENT THEME + READABILITY
+   Canvas/Better Canvas may inject its own colors after page load. This pass
+   makes the course shell, sidebars, syllabus/tables and text use the selected
+   DuskBloom palette as one coherent theme while preserving real media.
+   ============================================================ */
+(() => {
+  if(!/(^|\.)instructure\.com$/i.test(location.hostname)) return;
+  const KEY=\`mf44:\${location.hostname}\`, ID="mf55-canvas-coherent";
+  const remove=()=>document.getElementById(ID)?.remove();
+
+  function apply(s){
+    remove(); if(s?.enabled===false) return;
+    const st=document.createElement("style"); st.id=ID;
+    st.textContent=\`
+      /* Canvas page shells */
+      html[data-mf44-on="1"] :is(
+        body,#application,#wrapper,#main,#not_right_side,#content-wrapper,
+        .ic-app,.ic-app-main-content,.ic-Layout-wrapper,.ic-Layout-contentWrapper,
+        .ic-Layout-contentMain
+      ){
+        background:var(--mf-bg)!important;
+        background-color:var(--mf-bg)!important;
+        color:var(--mf-text)!important;
+      }
+
+      /* Global + course navigation. Override Canvas and Better Canvas colors. */
+      html[data-mf44-on="1"] :is(
+        #global_nav,#menu,.ic-app-header,.ic-app-header__main-navigation,
+        .ic-app-header__menu-list,.ic-app-header__menu-list-item,
+        #left-side,#section-tabs,#section-tabs > li
+      ){
+        background:var(--mf-panel)!important;
+        background-color:var(--mf-panel)!important;
+        border-color:color-mix(in srgb,var(--mf-muted) 28%,transparent)!important;
+      }
+      html[data-mf44-on="1"] :is(
+        .ic-app-header__menu-list-link,#section-tabs a,#section-tabs button
+      ){
+        background:transparent!important;
+        background-color:transparent!important;
+        color:var(--mf-muted)!important;
+        -webkit-text-fill-color:var(--mf-muted)!important;
+        opacity:1!important;
+        box-shadow:none!important;
+      }
+      html[data-mf44-on="1"] :is(
+        .ic-app-header__menu-list-link:hover,.ic-app-header__menu-list-link:focus,
+        .ic-app-header__menu-list-link:active,
+        #section-tabs a:hover,#section-tabs a:focus,#section-tabs a.active,
+        #section-tabs a[aria-current="page"]
+      ){
+        background:var(--mf-raised)!important;
+        background-color:var(--mf-raised)!important;
+        color:var(--mf-text)!important;
+        -webkit-text-fill-color:var(--mf-text)!important;
+      }
+
+      /* Right sidebar / course sidebar — no Better Canvas peach/white blocks. */
+      html[data-mf44-on="1"] :is(
+        #right-side-wrapper,#right-side,.ic-Layout-contentSecondary,
+        .course-options,.course-options *,
+        .todo-list,.todo-list-header,.todo-list-item,
+        [class*="ToDoSidebar" i],[class*="CourseSidebar" i]
+      ):not(img):not(picture):not(video):not(canvas):not(svg){
+        background-color:var(--mf-panel)!important;
+        color:var(--mf-text)!important;
+        border-color:color-mix(in srgb,var(--mf-muted) 32%,transparent)!important;
+      }
+
+      /* Course content containers. Catch the pieces that were alternating
+         between Better Canvas black, peach and Canvas white. */
+      html[data-mf44-on="1"] #content :is(
+        section,article,aside,fieldset,details,dialog,
+        .content,.user_content,.show-content,.syllabus,
+        .syllabus_assignment,.syllabus_assignment_group,
+        .header-bar,.page-toolbar,.form-actions,.module-sequence-footer-content,
+        .panel,.well,.alert,.ui-widget-content,.ui-dialog-content,
+        [class*="container" i],[class*="panel" i],[class*="card" i]
+      ):not([style*="background-image"]){
+        background-color:var(--mf-panel)!important;
+        color:var(--mf-text)!important;
+        border-color:color-mix(in srgb,var(--mf-muted) 30%,transparent)!important;
+      }
+
+      /* Syllabus/schedule tables: every cell gets a dark readable surface.
+         This fixes the bright white rows visible in the screenshot. */
+      html[data-mf44-on="1"] #content :is(table,thead,tbody,tfoot,tr,th,td),
+      html[data-mf44-on="1"] #right-side :is(table,thead,tbody,tfoot,tr,th,td),
+      html[data-mf44-on="1"] #right-side-wrapper :is(table,thead,tbody,tfoot,tr,th,td){
+        background:var(--mf-panel)!important;
+        background-color:var(--mf-panel)!important;
+        color:var(--mf-text)!important;
+        -webkit-text-fill-color:var(--mf-text)!important;
+        border-color:color-mix(in srgb,var(--mf-muted) 34%,transparent)!important;
+        opacity:1!important;
+      }
+      html[data-mf44-on="1"] #content :is(thead th,[role="columnheader"]),
+      html[data-mf44-on="1"] #content :is(tr):nth-child(even) > :is(td,th){
+        background:var(--mf-raised)!important;
+        background-color:var(--mf-raised)!important;
+      }
+
+      /* Readability: Canvas and Better Canvas frequently set colors inline on
+         nested spans/divs. Reassert text only; don't recolor icon/media nodes. */
+      html[data-mf44-on="1"] :is(
+        #content,#left-side,#right-side,#right-side-wrapper,#section-tabs
+      ) :is(
+        p,li,dd,dt,label,legend,blockquote,figcaption,
+        h1,h2,h3,h4,h5,h6,th,td,
+        span:not([class*="icon" i]):not([role="img"]),
+        div[class*="text" i],div[class*="title" i],div[class*="description" i]
+      ){
+        color:var(--mf-text)!important;
+        -webkit-text-fill-color:var(--mf-text)!important;
+        text-shadow:none!important;
+        opacity:1!important;
+      }
+      html[data-mf44-on="1"] :is(#content,#left-side,#right-side,#right-side-wrapper) a{
+        color:var(--mf-accent)!important;
+        -webkit-text-fill-color:var(--mf-accent)!important;
+        opacity:1!important;
+      }
+      html[data-mf44-on="1"] :is(
+        #content,#left-side,#right-side,#right-side-wrapper
+      ) :is(small,.muted,.text-muted,[class*="secondary" i],[class*="meta" i]){
+        color:var(--mf-muted)!important;
+        -webkit-text-fill-color:var(--mf-muted)!important;
+      }
+
+      /* Inputs/buttons */
+      html[data-mf44-on="1"] :is(
+        #content,#left-side,#right-side,#right-side-wrapper
+      ) :is(
+        button,[role="button"],input:not([type="checkbox"]):not([type="radio"]),
+        textarea,select,.btn,.Button
+      ){
+        background:var(--mf-raised)!important;
+        background-color:var(--mf-raised)!important;
+        color:var(--mf-text)!important;
+        -webkit-text-fill-color:var(--mf-text)!important;
+        border-color:color-mix(in srgb,var(--mf-muted) 42%,transparent)!important;
+      }
+
+      /* Preserve real media/course art. */
+      html[data-mf44-on="1"] :is(
+        img,picture,video,canvas,[role="img"],
+        .ic-DashboardCard__header,.ic-DashboardCard__header_hero,
+        .ic-DashboardCard__header_image,[style*="background-image"]
+      ){
+        filter:none!important;
+        -webkit-filter:none!important;
+        mix-blend-mode:normal!important;
+        opacity:1!important;
+        visibility:visible!important;
+      }
+      html[data-mf44-on="1"] :is(
+        .ic-DashboardCard__header,.ic-DashboardCard__header_hero,
+        .ic-DashboardCard__header_image,[style*="background-image"]
+      ){
+        background-color:transparent!important;
+      }
+    \`;
+    (document.head||document.documentElement).appendChild(st);
+  }
+
+  browser.storage.local.get(KEY).then(d=>apply({enabled:true,...(d[KEY]||{})}));
+  browser.storage.onChanged.addListener((c,a)=>{
+    if(a==="local"&&c[KEY]) apply({enabled:true,...(c[KEY].newValue||{})});
+  });
+  browser.runtime.onMessage.addListener(msg=>{
+    if(msg?.type==="MF44_SET") apply(msg.settings||{enabled:true});
+  });
+})();
