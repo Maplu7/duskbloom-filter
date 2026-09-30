@@ -30,9 +30,9 @@ let filters: [String: FilterDef] = [
  "midnight": .init(name:"Midnight",color:NSColor(calibratedRed:14/255,green:12/255,blue:22/255,alpha:1),alphas:levels([8,13,20,28,37,47,58,70,83,97,112,128,145,163,181,198,214,227,238,246])),
  "obsidian": .init(name:"Obsidian",color:NSColor(calibratedRed:8/255,green:8/255,blue:12/255,alpha:1),alphas:levels([10,16,24,33,43,54,66,79,93,108,124,141,159,178,196,212,226,237,246,252]))
 ]
-let filterOrder=["pink_blackout","pink","dark_pink","rose_dim","reading","purple","amber","green","warm_white","deep_red","bluelight","dark","midnight","obsidian"]
+let filterOrder=["pink_blackout","pink","dark_pink","rose_dim","dusty_rose","peach","sepia","sage","soft_cyan","mauve","smoke","cocoa","navy","burgundy","purple","amber","green","warm_white","deep_red","bluelight","dark","midnight","obsidian","reading"]
 let presets=[
- PresetDef(name:"Migraine",filter:"obsidian",intensity:20,whitePoint:true),
+ PresetDef(name:"Migraine",filter:"obsidian",intensity:18,whitePoint:true),
  PresetDef(name:"Study",filter:"warm_white",intensity:7,whitePoint:false),
  PresetDef(name:"Night",filter:"midnight",intensity:12,whitePoint:true),
  PresetDef(name:"Soft Pink",filter:"pink_blackout",intensity:10,whitePoint:false),
