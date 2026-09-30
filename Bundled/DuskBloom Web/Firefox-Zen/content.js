@@ -14,19 +14,29 @@
     customText:'#ffffff', customMuted:'#cbb9c6', customAccent:'#e7a1c6'
   };
   const PRESETS = {
-    pink_blackout:{bg:'#110b10',panel:'#21131d',raised:'#34202d',text:'#fff8fc',muted:'#d8bdcb',accent:'#ff8fc1'},
-    pink:{bg:'#24141e',panel:'#35202d',raised:'#493043',text:'#fff8fc',muted:'#e5c5d5',accent:'#f4a2ca'},
-    dark_pink:{bg:'#180e15',panel:'#291824',raised:'#3c2434',text:'#fff8fc',muted:'#d8b8c8',accent:'#e989b7'},
-    rose_dim:{bg:'#211619',panel:'#342328',raised:'#493139',text:'#fffaf8',muted:'#d8c0c3',accent:'#df9bab'},
-    lavender:{bg:'#171421',panel:'#28213a',raised:'#3a3051',text:'#fbf8ff',muted:'#d0c5df',accent:'#bc9ae7'},
-    amber:{bg:'#211a0f',panel:'#352a17',raised:'#4a3a20',text:'#fffaf0',muted:'#dfcfaa',accent:'#e7b85f'},
-    forest_green:{bg:'#101a14',panel:'#1c2b22',raised:'#2a4032',text:'#f7fcf8',muted:'#bfd3c5',accent:'#7fc49a'},
-    warm_white:{bg:'#2b2721',panel:'#3d372e',raised:'#51483c',text:'#fffaf1',muted:'#e1d5c2',accent:'#e8c58d'},
-    deep_red:{bg:'#1b0d10',panel:'#30161c',raised:'#48212a',text:'#fff8f8',muted:'#dcbfc3',accent:'#df7b89'},
-    blue_light:{bg:'#101b26',panel:'#1b2d3c',raised:'#29445a',text:'#f7fbff',muted:'#bfd3e1',accent:'#7fc1e7'},
-    dark_dimmer:{bg:'#151519',panel:'#25252b',raised:'#35353e',text:'#f7f7fa',muted:'#c6c6cf',accent:'#aaa8bd'},
-    midnight:{bg:'#0c1422',panel:'#16243a',raised:'#223653',text:'#f7faff',muted:'#becbe0',accent:'#7da6df'},
-    obsidian:{bg:'#101014',panel:'#1b1b21',raised:'#292932',text:'#f8f8fb',muted:'#c4bec7',accent:'#d3a5bf'}
+    pink_blackout:{bg:'#21151b',panel:'#35242d',raised:'#4a3340',text:'#fff8fc',muted:'#d8bdcb',accent:'#d67e9c'},
+    pink:{bg:'#261820',panel:'#3a2731',raised:'#513644',text:'#fff8fc',muted:'#e5c5d5',accent:'#eb9ab8'},
+    dark_pink:{bg:'#1d1118',panel:'#301d28',raised:'#432937',text:'#fff8fc',muted:'#d8b8c8',accent:'#9b4b6c'},
+    rose_dim:{bg:'#21171a',panel:'#35252b',raised:'#4a343c',text:'#fffaf8',muted:'#d8c0c3',accent:'#be7087'},
+    lavender:{bg:'#191520',panel:'#2a2435',raised:'#3c334a',text:'#fbf8ff',muted:'#d0c5df',accent:'#8f74a6'},
+    amber:{bg:'#21190f',panel:'#352a18',raised:'#4a3a21',text:'#fffaf0',muted:'#dfcfaa',accent:'#d69949'},
+    forest_green:{bg:'#111a14',panel:'#1e2c22',raised:'#2c4032',text:'#f7fcf8',muted:'#bfd3c5',accent:'#46694c'},
+    warm_white:{bg:'#2b2720',panel:'#3d372d',raised:'#51483b',text:'#fffaf1',muted:'#e1d5c2',accent:'#ffe0b4'},
+    deep_red:{bg:'#1c0d11',panel:'#30171c',raised:'#48222a',text:'#fff8f8',muted:'#dcbfc3',accent:'#691c24'},
+    blue_light:{bg:'#111a25',panel:'#1d2c3a',raised:'#2b4256',text:'#f7fbff',muted:'#bfd3e1',accent:'#4e6f94'},
+    dark_dimmer:{bg:'#111113',panel:'#202024',raised:'#303036',text:'#f7f7fa',muted:'#c6c6cf',accent:'#141414'},
+    midnight:{bg:'#0c0c14',panel:'#171522',raised:'#242135',text:'#f7faff',muted:'#becbe0',accent:'#0e0c16'},
+    obsidian:{bg:'#09090d',panel:'#17171c',raised:'#25252c',text:'#f8f8fb',muted:'#c4bec7',accent:'#08080c'},
+    dusty_rose:{bg:'#20161b',panel:'#33242b',raised:'#47323b',text:'#fff9fc',muted:'#d7c0ca',accent:'#a66c7e'},
+    peach:{bg:'#251a16',panel:'#3a2a24',raised:'#503a31',text:'#fff9f5',muted:'#dfc8bc',accent:'#de9d7e'},
+    sepia:{bg:'#1d1812',panel:'#30281d',raised:'#433829',text:'#fff9ef',muted:'#d7cbb8',accent:'#967956'},
+    sage:{bg:'#151a15',panel:'#252d24',raised:'#354034',text:'#f8fcf8',muted:'#c5d2c3',accent:'#748b70'},
+    soft_cyan:{bg:'#141b1c',panel:'#243032',raised:'#344447',text:'#f6fcfc',muted:'#c1d4d5',accent:'#709799'},
+    mauve:{bg:'#1b151a',panel:'#2d242c',raised:'#40333e',text:'#fcf8fb',muted:'#d1c2cd',accent:'#82607d'},
+    smoke:{bg:'#161719',panel:'#27292c',raised:'#383b3f',text:'#f8f9fa',muted:'#c7c9cc',accent:'#5c6067'},
+    cocoa:{bg:'#181311',panel:'#2a211e',raised:'#3b2f2b',text:'#fff9f6',muted:'#d3c5bf',accent:'#4c3732'},
+    navy:{bg:'#10131c',panel:'#1d2434',raised:'#2b354b',text:'#f7f9ff',muted:'#c0c8dc',accent:'#23304b'},
+    burgundy:{bg:'#190f13',panel:'#2c1b22',raised:'#402730',text:'#fff8fa',muted:'#d4c0c7',accent:'#522230'}
   };
 
   let settings = {...DEFAULTS};
