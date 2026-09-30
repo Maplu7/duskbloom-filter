@@ -1,0 +1,3 @@
+DuskBloom Center v1.0.4
+
+Fixes the Windows page-switch rendering glitch by keeping a persistent content sizer, freezing page transitions, forcing clean layout/repaint, and removing a duplicate Home button-row insertion.

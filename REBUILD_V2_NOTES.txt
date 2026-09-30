@@ -1,0 +1,14 @@
+DUSKBLOOM WINDOWS 2.0 REBUILD
+
+- Screen 4.0 uses a static click-through overlay and no screen capture.
+- Screen idle overlay maintenance dropped from ~60 checks/sec to a low-frequency check.
+- Center bridge polling dropped to once every 2 seconds.
+- Web 2.0 replaces stacked V44-V54 theme layers with one style engine.
+- Presets cleanly replace each other; My Colors uses the selected custom colors.
+- Canvas and Google Docs get targeted readability rules without inverting normal media.
+- Sonar sync is 5 seconds online / 8 seconds offline.
+- Center, Screen, and Sonar use real HKCU Windows Run startup entries.
+- Startup status verifies that the registered program actually exists.
+- Release builds include prebuilt Screen and Sonar EXEs so the target PC does not need Python.
+
+Reader 2.0 INCLUDED: low-resource PDF/DOCX/TXT reader, themes/presets, typography, position memory and Windows TTS. Center now treats Reader as a bundled ready component.
