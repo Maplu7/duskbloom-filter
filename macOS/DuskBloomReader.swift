@@ -108,12 +108,16 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, N
         scrollView.hasVerticalScroller = true
         scrollView.drawsBackground = true
 
+        textView.frame = NSRect(x: 0, y: 0, width: documentFrame.width, height: documentFrame.height)
+        textView.minSize = NSSize(width: 0, height: documentFrame.height)
+        textView.maxSize = NSSize(width: .greatestFiniteMagnitude, height: .greatestFiniteMagnitude)
         textView.isEditable = false
         textView.isSelectable = true
         textView.isRichText = true
         textView.isVerticallyResizable = true
         textView.isHorizontallyResizable = false
         textView.autoresizingMask = [.width]
+        textView.textContainer?.containerSize = NSSize(width: documentFrame.width, height: .greatestFiniteMagnitude)
         textView.textContainer?.widthTracksTextView = true
         textView.textContainerInset = NSSize(width: 72, height: 48)
         scrollView.documentView = textView
@@ -201,8 +205,8 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, N
 
     private func applyTypography() {
         let style = NSMutableParagraphStyle()
-        style.lineSpacing = 7
-        style.paragraphSpacing = 10
+        style.lineSpacing = max(5, fontSize * 0.38)
+        style.paragraphSpacing = max(9, fontSize * 0.55)
         let range = NSRange(location: 0, length: textView.string.utf16.count)
         textView.font = .systemFont(ofSize: fontSize)
         if range.length > 0 {
@@ -210,6 +214,12 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, N
                 .font: NSFont.systemFont(ofSize: fontSize),
                 .paragraphStyle: style
             ], range: range)
+        }
+        textView.sizeToFit()
+        if let container = textView.textContainer, let manager = textView.layoutManager {
+            manager.ensureLayout(for: container)
+            let used = manager.usedRect(for: container)
+            textView.frame.size.height = max(scrollView.contentSize.height, used.height + textView.textContainerInset.height * 2)
         }
         UserDefaults.standard.set(Double(fontSize), forKey: "readerFontSize")
     }
