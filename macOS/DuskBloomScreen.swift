@@ -69,7 +69,9 @@ final class AppDelegate:NSObject,NSApplicationDelegate {
   buildStatus(); rebuildOverlays()
   NotificationCenter.default.addObserver(self,selector:#selector(displaysChanged),name:NSApplication.didChangeScreenParametersNotification,object:nil)
   NSWorkspace.shared.notificationCenter.addObserver(self,selector:#selector(woke),name:NSWorkspace.didWakeNotification,object:nil)
+  DistributedNotificationCenter.default().addObserver(self, selector:#selector(externalCommand), name:Notification.Name("com.duskbloom.DuskBloomScreen.settingsChanged"), object:nil)
  }
+ @objc func externalCommand(){ d.synchronize(); load(); apply() }
  func load() {
   enabled=d.object(forKey:"enabled") as? Bool ?? true
   filter=d.string(forKey:"filter") ?? "pink_blackout"; if filters[filter] == nil { filter="pink_blackout" }
@@ -160,6 +162,70 @@ final class AppDelegate:NSObject,NSApplicationDelegate {
  @objc func displaysChanged(){rebuildOverlays()}
  @objc func woke(){rebuildOverlays()}
  @objc func quit(){NSApp.terminate(nil)}
+}
+
+// Lightweight command bridge used by the Übersicht DuskBloom dashboard.
+// It only edits DuskBloom Screen's preferences and wakes the already-running app.
+// No screen capture, polling process, or background Python process is used.
+func commandDefaults() -> UserDefaults {
+ return UserDefaults(suiteName:"com.duskbloom.DuskBloomScreen") ?? .standard
+}
+func notifyRunningScreen() {
+ DistributedNotificationCenter.default().post(name:Notification.Name("com.duskbloom.DuskBloomScreen.settingsChanged"),object:nil)
+}
+func filterDisplayName(_ key:String)->String { filters[key]?.name ?? key }
+func jsonStatus(_ d:UserDefaults) {
+ let key=d.string(forKey:"filter") ?? "pink_blackout"
+ let level=max(1,min(20,d.object(forKey:"level") as? Int ?? 7))
+ let on=d.object(forKey:"enabled") as? Bool ?? true
+ let wp=d.object(forKey:"whitePoint") as? Bool ?? false
+ let payload:[String:Any]=[
+  "enabled":on,"paused":false,"running":true,"filter":key,"filter_name":filterDisplayName(key),
+  "intensity":level,"white_point_killer":wp,"adaptive_brightness":false,"flash_protection":false,
+  "brightness_compression":false,"auto_fade":false,"startup_safety":true,"launch_at_login":false,
+  "temporary_reveal":false,"monitor_memory":true,"remembered_monitors":NSScreen.screens.count,"gaming_safe_mode":true,
+  "flash_strength":"Native"
+ ]
+ if let data=try? JSONSerialization.data(withJSONObject:payload),let s=String(data:data,encoding:.utf8){print(s)}
+}
+func runDashboardCommand(_ args:[String])->Bool {
+ guard let cmd=args.first else{return false}
+ let d=commandDefaults()
+ func setEnabled(_ v:Bool){d.set(v,forKey:"enabled")}
+ switch cmd.lowercased() {
+ case "status": jsonStatus(d); return true
+ case "toggle": setEnabled(!(d.object(forKey:"enabled") as? Bool ?? true))
+ case "on": setEnabled(true)
+ case "off": setEnabled(false)
+ case "intensity":
+  if args.count>1,let n=Int(args[1]){d.set(max(1,min(20,n)),forKey:"level");setEnabled(true)}
+ case "filter":
+  if args.count>1,filters[args[1]] != nil{d.set(args[1],forKey:"filter");d.set(false,forKey:"perMonitor");setEnabled(true)}
+ case "preset","mode":
+  if args.count>1 {
+   let wanted=args.dropFirst().joined(separator:" ").lowercased()
+   let aliases=["reading":"reading comfort","media":"media","night":"night","study":"study","migraine":"migraine","soft pink":"soft pink"]
+   let target=aliases[wanted] ?? wanted
+   if let p=presets.first(where:{$0.name.lowercased()==target}) {
+    d.set(p.filter,forKey:"filter");d.set(p.intensity,forKey:"level");d.set(p.whitePoint,forKey:"whitePoint");d.set(false,forKey:"perMonitor");setEnabled(true)
+   }
+  }
+ case "whitepoint","white-point":
+  if args.count>1{d.set(args[1].lowercased()=="on",forKey:"whitePoint")}
+ case "folder":
+  NSWorkspace.shared.activateFileViewerSelecting([Bundle.main.bundleURL]); return true
+ // Compatibility with buttons from the older dashboard. These features are
+ // intentionally passive in the native low-memory Screen build.
+ case "adaptive","flash","compression","fade","startup-safety","reveal","monitor-memory","gaming","launch":
+  break
+ default: return false
+ }
+ d.synchronize();notifyRunningScreen();return true
+}
+
+let cli=Array(CommandLine.arguments.dropFirst())
+if !cli.isEmpty && runDashboardCommand(cli) {
+ exit(0)
 }
 
 let app=NSApplication.shared
