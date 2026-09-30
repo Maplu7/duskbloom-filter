@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "DuskBloom Web",
-  "version": "2.0.0",
-  "description": "Low-memory migraine-friendly web comfort themes with clean preset switching and custom colors.",
+  "version": "9.4.2",
+  "description": "DuskBloom v54 migraine-friendly filter with full container coverage and protected media.",
   "permissions": [
     "activeTab",
     "contextMenus",
