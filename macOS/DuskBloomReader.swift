@@ -110,14 +110,14 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, N
 
         textView.frame = NSRect(x: 0, y: 0, width: documentFrame.width, height: documentFrame.height)
         textView.minSize = NSSize(width: 0, height: documentFrame.height)
-        textView.maxSize = NSSize(width: .greatestFiniteMagnitude, height: .greatestFiniteMagnitude)
+        textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
         textView.isEditable = false
         textView.isSelectable = true
         textView.isRichText = true
         textView.isVerticallyResizable = true
         textView.isHorizontallyResizable = false
         textView.autoresizingMask = [.width]
-        textView.textContainer?.containerSize = NSSize(width: documentFrame.width, height: .greatestFiniteMagnitude)
+        textView.textContainer?.containerSize = NSSize(width: documentFrame.width, height: CGFloat.greatestFiniteMagnitude)
         textView.textContainer?.widthTracksTextView = true
         textView.textContainerInset = NSSize(width: 72, height: 48)
         scrollView.documentView = textView
