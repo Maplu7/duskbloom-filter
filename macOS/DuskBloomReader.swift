@@ -8,6 +8,9 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private let scrollView = NSScrollView()
     private let textView = NSTextView()
     private var fontSize: CGFloat = 17
+    private let presetMenu = NSPopUpButton()
+    private let speaker = NSSpeechSynthesizer()
+    private var isSpeaking = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
@@ -67,6 +70,22 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         comfortButton.bezelStyle = .rounded
         root.addSubview(comfortButton)
 
+        presetMenu.frame = NSRect(x: 414, y: 710, width: 150, height: 32)
+        presetMenu.addItems(withTitles: ["Obsidian", "Cozy Pink", "Sky Blue", "Warm Paper"])
+        presetMenu.selectItem(withTitle: "Obsidian")
+        presetMenu.target = self
+        presetMenu.action = #selector(changePreset)
+        root.addSubview(presetMenu)
+
+        let readButton = NSButton(
+            title: "Read Aloud",
+            target: self,
+            action: #selector(toggleReadAloud)
+        )
+        readButton.frame = NSRect(x: 578, y: 710, width: 110, height: 32)
+        readButton.bezelStyle = .rounded
+        root.addSubview(readButton)
+
         pdfView.frame = NSRect(x: 20, y: 20, width: 960, height: 675)
         pdfView.autoresizingMask = [.width, .height]
         pdfView.autoScales = true
@@ -107,6 +126,7 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         root.addSubview(scrollView)
         scrollView.isHidden = true
 
+        applyPreset(named: "Obsidian")
         window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
@@ -228,7 +248,60 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
     }
 
+    @objc private func changePreset() {
+        applyPreset(named: presetMenu.titleOfSelectedItem ?? "Obsidian")
+    }
+
+    private func applyPreset(named name: String) {
+        let background: NSColor
+        let textColor: NSColor
+        switch name {
+        case "Cozy Pink":
+            background = NSColor(calibratedRed: 0.16, green: 0.09, blue: 0.13, alpha: 1)
+            textColor = NSColor(calibratedRed: 1.0, green: 0.94, blue: 0.97, alpha: 1)
+        case "Sky Blue":
+            background = NSColor(calibratedRed: 0.07, green: 0.12, blue: 0.17, alpha: 1)
+            textColor = NSColor(calibratedRed: 0.93, green: 0.97, blue: 1.0, alpha: 1)
+        case "Warm Paper":
+            background = NSColor(calibratedRed: 0.20, green: 0.17, blue: 0.13, alpha: 1)
+            textColor = NSColor(calibratedRed: 1.0, green: 0.96, blue: 0.88, alpha: 1)
+        default:
+            background = NSColor(calibratedRed: 0.07, green: 0.07, blue: 0.09, alpha: 1)
+            textColor = NSColor(calibratedWhite: 0.94, alpha: 1)
+        }
+        scrollView.backgroundColor = background
+        textView.backgroundColor = background
+        textView.textColor = textColor
+        pdfView.backgroundColor = background
+    }
+
+    @objc private func toggleReadAloud(_ sender: NSButton) {
+        if isSpeaking {
+            speaker.stopSpeaking()
+            isSpeaking = false
+            sender.title = "Read Aloud"
+            return
+        }
+
+        var words = textView.string
+        if !pdfView.isHidden, let document = pdfView.document {
+            words = ""
+            for index in 0..<document.pageCount {
+                words += document.page(at: index)?.string ?? ""
+                words += "\n"
+            }
+        }
+        guard !words.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            NSSound.beep()
+            return
+        }
+        speaker.startSpeaking(words)
+        isSpeaking = true
+        sender.title = "Stop Reading"
+    }
+
     func windowWillClose(_ notification: Notification) {
+        speaker.stopSpeaking()
         NSApp.terminate(nil)
     }
 }
