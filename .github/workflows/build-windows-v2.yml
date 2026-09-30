@@ -1,0 +1,48 @@
+name: Build DuskBloom Windows v2.0.0
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "DuskBloomCenter.py"
+      - "BUILD_WINDOWS_RELEASE.bat"
+      - "Bundled/**"
+      - "update_catalog.json"
+      - ".github/workflows/build-windows-v2.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout DuskBloom
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Build DuskBloom Windows 2.0
+        shell: cmd
+        run: BUILD_WINDOWS_RELEASE.bat
+
+      - name: Verify release
+        shell: pwsh
+        run: |
+          if (!(Test-Path "DuskBloom_Windows_v2.0.0.zip")) { throw "Release ZIP was not created." }
+          Get-Item "DuskBloom_Windows_v2.0.0.zip" | Format-List Name,Length,LastWriteTime
+
+      - name: Upload Windows release
+        uses: actions/upload-artifact@v4
+        with:
+          name: DuskBloom-Windows-v2.0.0
+          path: DuskBloom_Windows_v2.0.0.zip
+          if-no-files-found: error
+          retention-days: 30
