@@ -71,8 +71,8 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         root.addSubview(comfortButton)
 
         presetMenu.frame = NSRect(x: 414, y: 710, width: 150, height: 32)
-        presetMenu.addItems(withTitles: ["Obsidian", "Cozy Pink", "Sky Blue", "Warm Paper"])
-        presetMenu.selectItem(withTitle: "Obsidian")
+        presetMenu.addItems(withTitles: ["Pink Blackout","Pink","Dark Pink","Rose Dim","Lavender","Amber","Forest Green","Warm White","Deep Red","Blue Light","Dark Dimmer","Midnight","Obsidian","Dusty Rose","Peach","Sepia","Sage","Soft Cyan","Mauve","Smoke","Cocoa","Navy","Burgundy"])
+        presetMenu.selectItem(withTitle: UserDefaults.standard.string(forKey: "readerPreset") ?? "Obsidian")
         presetMenu.target = self
         presetMenu.action = #selector(changePreset)
         root.addSubview(presetMenu)
@@ -126,7 +126,7 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         root.addSubview(scrollView)
         scrollView.isHidden = true
 
-        applyPreset(named: "Obsidian")
+        applyPreset(named: presetMenu.titleOfSelectedItem ?? "Obsidian")
         window.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
@@ -253,26 +253,26 @@ final class ReaderDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     private func applyPreset(named name: String) {
-        let background: NSColor
-        let textColor: NSColor
-        switch name {
-        case "Cozy Pink":
-            background = NSColor(calibratedRed: 0.16, green: 0.09, blue: 0.13, alpha: 1)
-            textColor = NSColor(calibratedRed: 1.0, green: 0.94, blue: 0.97, alpha: 1)
-        case "Sky Blue":
-            background = NSColor(calibratedRed: 0.07, green: 0.12, blue: 0.17, alpha: 1)
-            textColor = NSColor(calibratedRed: 0.93, green: 0.97, blue: 1.0, alpha: 1)
-        case "Warm Paper":
-            background = NSColor(calibratedRed: 0.20, green: 0.17, blue: 0.13, alpha: 1)
-            textColor = NSColor(calibratedRed: 1.0, green: 0.96, blue: 0.88, alpha: 1)
-        default:
-            background = NSColor(calibratedRed: 0.07, green: 0.07, blue: 0.09, alpha: 1)
-            textColor = NSColor(calibratedWhite: 0.94, alpha: 1)
-        }
+        let values: [String: (CGFloat, CGFloat, CGFloat)] = [
+            "Pink Blackout": (214,126,156), "Pink": (235,154,184), "Dark Pink": (155,75,108),
+            "Rose Dim": (190,112,135), "Lavender": (143,116,166), "Amber": (214,153,73),
+            "Forest Green": (70,105,76), "Warm White": (255,224,180), "Deep Red": (105,28,36),
+            "Blue Light": (78,111,148), "Dark Dimmer": (20,20,20), "Midnight": (14,12,22),
+            "Obsidian": (8,8,12), "Dusty Rose": (166,108,126), "Peach": (222,157,126),
+            "Sepia": (150,121,86), "Sage": (116,139,112), "Soft Cyan": (112,151,153),
+            "Mauve": (130,96,125), "Smoke": (92,96,103), "Cocoa": (76,55,50),
+            "Navy": (35,48,75), "Burgundy": (82,34,48)
+        ]
+        let rgb = values[name] ?? values["Obsidian"]!
+        let base = NSColor(calibratedRed: 0.055, green: 0.05, blue: 0.06, alpha: 1)
+        let tint = NSColor(calibratedRed: rgb.0/255, green: rgb.1/255, blue: rgb.2/255, alpha: 1)
+        let background = base.blended(withFraction: 0.30, of: tint) ?? base
+        let textColor = NSColor(calibratedWhite: 0.96, alpha: 1)
         scrollView.backgroundColor = background
         textView.backgroundColor = background
         textView.textColor = textColor
         pdfView.backgroundColor = background
+        UserDefaults.standard.set(name, forKey: "readerPreset")
     }
 
     @objc private func toggleReadAloud(_ sender: NSButton) {
