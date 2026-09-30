@@ -51,6 +51,13 @@ final class OverlayWindow: NSWindow {
 struct Profile: Codable { var filter:String; var intensity:Int; var whitePoint:Bool }
 struct MonitorSetting: Codable { var enabled:Bool; var filter:String; var intensity:Int }
 
+private let dashboardDarwinName = "com.duskbloom.DuskBloomScreen.settingsChanged" as CFString
+private func dashboardDarwinCallback(_ center: CFNotificationCenter?, _ observer: UnsafeMutableRawPointer?, _ name: CFNotificationName?, _ object: UnsafeRawPointer?, _ userInfo: CFDictionary?) {
+ guard let observer else { return }
+ let delegate = Unmanaged<AppDelegate>.fromOpaque(observer).takeUnretainedValue()
+ DispatchQueue.main.async { delegate.externalCommand() }
+}
+
 final class AppDelegate:NSObject,NSApplicationDelegate {
  let d=UserDefaults.standard
  var status:NSStatusItem!
@@ -70,6 +77,14 @@ final class AppDelegate:NSObject,NSApplicationDelegate {
   NotificationCenter.default.addObserver(self,selector:#selector(displaysChanged),name:NSApplication.didChangeScreenParametersNotification,object:nil)
   NSWorkspace.shared.notificationCenter.addObserver(self,selector:#selector(woke),name:NSWorkspace.didWakeNotification,object:nil)
   DistributedNotificationCenter.default().addObserver(self, selector:#selector(externalCommand), name:Notification.Name("com.duskbloom.DuskBloomScreen.settingsChanged"), object:nil)
+  CFNotificationCenterAddObserver(
+   CFNotificationCenterGetDarwinNotifyCenter(),
+   Unmanaged.passUnretained(self).toOpaque(),
+   dashboardDarwinCallback,
+   CFNotificationName(dashboardDarwinName),
+   nil,
+   .deliverImmediately
+  )
  }
  @objc func externalCommand(){ d.synchronize(); load(); apply() }
  func load() {
