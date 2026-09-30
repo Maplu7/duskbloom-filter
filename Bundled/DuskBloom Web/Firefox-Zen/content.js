@@ -1537,3 +1537,99 @@ const KEY=`mf44:${location.hostname}`;
     if(msg?.type==="MF44_SET") apply(msg.settings||{enabled:true});
   });
 })();
+
+
+/* ============================================================
+   V56 — CANVAS ALL-CONTAINER FINAL PASS
+   Final authority after Canvas + Better Canvas. Covers generic nested
+   containers, InstUI wrappers and dynamically inserted syllabus/sidebar UI.
+   Real media and CSS artwork remain untouched.
+   ============================================================ */
+(() => {
+ if(!/(^|\.)instructure\.com$/i.test(location.hostname)) return;
+ const KEY=\`mf44:\${location.hostname}\`, ID="mf56-canvas-all-containers";
+ const remove=()=>document.getElementById(ID)?.remove();
+ function apply(settings){
+  remove(); if(settings?.enabled===false) return;
+  const st=document.createElement("style"); st.id=ID;
+  st.textContent=\`
+   /* Every structural Canvas surface, including generic InstUI div wrappers. */
+   html[data-mf44-on="1"] :is(
+    #application,#wrapper,#main,#not_right_side,#content-wrapper,#content,
+    #left-side,#right-side,#right-side-wrapper,
+    .ic-app,.ic-app-main-content,.ic-Layout-wrapper,.ic-Layout-contentWrapper,
+    .ic-Layout-contentMain,.ic-Layout-contentSecondary,
+    #content > div,#content > div > div,
+    #right-side > div,#right-side-wrapper > div,
+    section,article,aside,fieldset,details,dialog,
+    [role="main"],[role="region"],[role="tabpanel"],[role="dialog"],
+    [role="menu"],[role="listbox"],[role="option"],
+    [class*="container" i],[class*="wrapper" i],[class*="panel" i],
+    [class*="content" i],[class*="module" i],[class*="item" i],
+    [class*="list" i],[class*="row" i],[class*="card" i],
+    [class*="sidebar" i],[class*="syllabus" i],[class*="assignment" i],
+    [class*="announcement" i],[class*="todo" i],[class*="popover" i],
+    [class*="modal" i],[class*="dialog" i],[class*="toolbar" i]
+   ):not([style*="background-image"]):not(.ic-DashboardCard__header):
+     not(.ic-DashboardCard__header_hero):not(.ic-DashboardCard__header_image){
+    background-color:var(--mf-panel)!important;
+    color:var(--mf-text)!important;
+    border-color:color-mix(in srgb,var(--mf-muted) 30%,transparent)!important;
+   }
+
+   /* Base page remains the deepest theme color. */
+   html[data-mf44-on="1"] :is(body,#application,#wrapper,#main,#not_right_side){
+    background:var(--mf-bg)!important;background-color:var(--mf-bg)!important;
+   }
+
+   /* Generic nested blocks that Canvas/Better Canvas leaves white/peach. */
+   html[data-mf44-on="1"] :is(#content,#right-side,#right-side-wrapper)
+     > :is(div,section,article,aside),
+   html[data-mf44-on="1"] :is(#content,#right-side,#right-side-wrapper)
+     > :is(div,section,article,aside) > :is(div,section,article,aside){
+    background-color:var(--mf-panel)!important;color:var(--mf-text)!important;
+   }
+
+   /* All tables/cells, including syllabus rows dynamically inserted later. */
+   html[data-mf44-on="1"] :is(#content,#right-side,#right-side-wrapper)
+     :is(table,thead,tbody,tfoot,tr,th,td){
+    background:var(--mf-panel)!important;background-color:var(--mf-panel)!important;
+    color:var(--mf-text)!important;-webkit-text-fill-color:var(--mf-text)!important;
+    border-color:color-mix(in srgb,var(--mf-muted) 34%,transparent)!important;
+    opacity:1!important;
+   }
+   html[data-mf44-on="1"] :is(#content,#right-side,#right-side-wrapper)
+     tr:nth-child(even) > :is(td,th){
+    background:var(--mf-raised)!important;background-color:var(--mf-raised)!important;
+   }
+
+   /* Text always wins over inline Better Canvas/Canvas colors. */
+   html[data-mf44-on="1"] :is(#content,#left-side,#right-side,#right-side-wrapper)
+     :is(p,li,dd,dt,label,legend,small,strong,em,b,blockquote,figcaption,
+         h1,h2,h3,h4,h5,h6,th,td,
+         span:not([class*="icon" i]):not([role="img"])){
+    color:var(--mf-text)!important;-webkit-text-fill-color:var(--mf-text)!important;
+    opacity:1!important;text-shadow:none!important;
+   }
+   html[data-mf44-on="1"] :is(#content,#left-side,#right-side,#right-side-wrapper) a{
+    color:var(--mf-accent)!important;-webkit-text-fill-color:var(--mf-accent)!important;
+   }
+
+   /* Final media/artwork escape hatch. */
+   html[data-mf44-on="1"] :is(img,picture,video,canvas,svg,[role="img"],
+     .ic-DashboardCard__header,.ic-DashboardCard__header_hero,
+     .ic-DashboardCard__header_image,[style*="background-image"]){
+    filter:none!important;-webkit-filter:none!important;mix-blend-mode:normal!important;
+    opacity:1!important;visibility:visible!important;
+   }
+   html[data-mf44-on="1"] :is(.ic-DashboardCard__header,.ic-DashboardCard__header_hero,
+     .ic-DashboardCard__header_image,[style*="background-image"]){
+    background-color:transparent!important;
+   }
+  \`;
+  (document.head||document.documentElement).appendChild(st);
+ }
+ browser.storage.local.get(KEY).then(d=>apply({enabled:true,...(d[KEY]||{})}));
+ browser.storage.onChanged.addListener((c,a)=>{if(a==="local"&&c[KEY])apply({enabled:true,...(c[KEY].newValue||{})})});
+ browser.runtime.onMessage.addListener(msg=>{if(msg?.type==="MF44_SET")apply(msg.settings||{enabled:true})});
+})();
