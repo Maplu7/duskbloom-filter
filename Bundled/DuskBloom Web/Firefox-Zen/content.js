@@ -1254,3 +1254,110 @@ const KEY=`mf44:${location.hostname}`;
     if(msg?.type==="MF44_SET") apply(msg.settings||{enabled:true});
   });
 })();
+
+
+/* ============================================================
+   DUSKBLOOM READABILITY GUARD
+   Final text/form contrast pass. Keeps v54 layout/media logic intact.
+   ============================================================ */
+(() => {
+  const ID = "duskbloom-readability-guard";
+  const install = () => {
+    document.getElementById(ID)?.remove();
+    const st = document.createElement("style");
+    st.id = ID;
+    st.textContent = `
+      html[data-mf44-on="1"] :is(
+        p,li,dd,dt,blockquote,figcaption,caption,label,legend,
+        h1,h2,h3,h4,h5,h6,th,td
+      ) {
+        color:var(--mf-text)!important;
+        -webkit-text-fill-color:var(--mf-text)!important;
+        text-shadow:none!important;
+        opacity:1!important;
+      }
+
+      html[data-mf44-on="1"] :is(
+        small,.text-muted,.muted,[class*="secondary" i],[class*="subtitle" i],
+        [class*="description" i],[class*="meta" i]
+      ) {
+        color:var(--mf-muted)!important;
+        -webkit-text-fill-color:var(--mf-muted)!important;
+        opacity:1!important;
+      }
+
+      html[data-mf44-on="1"] :is(a,a:visited) {
+        color:var(--mf-accent)!important;
+        -webkit-text-fill-color:var(--mf-accent)!important;
+        opacity:1!important;
+      }
+
+      html[data-mf44-on="1"] :is(
+        input:not([type="color"]):not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+        textarea,select,[contenteditable="true"],[role="textbox"]
+      ) {
+        background-color:var(--mf-panel)!important;
+        color:var(--mf-text)!important;
+        -webkit-text-fill-color:var(--mf-text)!important;
+        caret-color:var(--mf-accent)!important;
+        border-color:color-mix(in srgb,var(--mf-muted) 45%,transparent)!important;
+        opacity:1!important;
+      }
+
+      html[data-mf44-on="1"] :is(input,textarea)::placeholder {
+        color:var(--mf-muted)!important;
+        -webkit-text-fill-color:var(--mf-muted)!important;
+        opacity:.9!important;
+      }
+
+      html[data-mf44-on="1"] :is(button,[role="button"]) {
+        color:var(--mf-text)!important;
+        -webkit-text-fill-color:var(--mf-text)!important;
+      }
+
+      /* Preserve actual media and graphical artwork. */
+      html[data-mf44-on="1"] :is(img,picture,video,canvas,svg,[role="img"]) {
+        -webkit-text-fill-color:initial!important;
+        text-shadow:initial!important;
+      }
+
+      /* Google Docs: readable page text/caret without flattening document media. */
+      html[data-mf44-on="1"] .kix-appview-editor,
+      html[data-mf44-on="1"] .kix-appview-editor-container,
+      html[data-mf44-on="1"] .kix-page,
+      html[data-mf44-on="1"] .kix-page-content-wrapper {
+        background-color:var(--mf-panel)!important;
+      }
+      html[data-mf44-on="1"] .docs-title-input,
+      html[data-mf44-on="1"] .docs-title-input-label {
+        color:var(--mf-text)!important;
+        -webkit-text-fill-color:var(--mf-text)!important;
+      }
+
+      /* Canvas: keep body/course text readable even when Canvas supplies
+         inline gray text colors. v53/v54 still own navigation/top-bar styling. */
+      html[data-mf44-on="1"] :is(
+        #content,#content-wrapper,#course_home_content,
+        .user_content,.show-content,.assignment-description,
+        .discussion_entry,.message_wrapper
+      ) :is(p,li,dd,dt,h1,h2,h3,h4,h5,h6,span:not([class*="icon" i])) {
+        color:var(--mf-text)!important;
+        -webkit-text-fill-color:var(--mf-text)!important;
+        opacity:1!important;
+      }
+    `;
+    (document.head || document.documentElement).appendChild(st);
+  };
+
+  const remove = () => document.getElementById(ID)?.remove();
+  const KEY = `mf44:${location.hostname}`;
+  const sync = settings => settings?.enabled === false ? remove() : install();
+
+  browser.storage.local.get(KEY).then(d => sync({enabled:true,...(d[KEY]||{})}));
+  browser.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && changes[KEY]) sync({enabled:true,...(changes[KEY].newValue||{})});
+  });
+  browser.runtime.onMessage.addListener(msg => {
+    if (msg?.type === "MF44_SET") sync(msg.settings || {enabled:true});
+  });
+})();
