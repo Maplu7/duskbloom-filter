@@ -23,6 +23,9 @@ jobs:
           test -x "release_macos/DuskBloom Screen.app/Contents/MacOS/DuskBloom Screen"
           test -x "release_macos/DuskBloom Center.app/Contents/MacOS/DuskBloom Center"
           test -x "release_macos/DuskBloom Reader.app/Contents/MacOS/DuskBloom Reader"
+          codesign --verify --deep --strict "release_macos/DuskBloom Screen.app"
+          codesign --verify --deep --strict "release_macos/DuskBloom Center.app"
+          codesign --verify --deep --strict "release_macos/DuskBloom Reader.app"
           test -f DuskBloom_macOS_v2.0.0.zip
       - name: Upload macOS release
         uses: actions/upload-artifact@v4
