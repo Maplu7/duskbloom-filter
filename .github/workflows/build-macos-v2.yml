@@ -1,5 +1,4 @@
 name: Build DuskBloom macOS v2.0.0
-
 on:
   workflow_dispatch:
   push:
@@ -8,32 +7,23 @@ on:
       - "macOS/**"
       - "Bundled/DuskBloom Web/**"
       - ".github/workflows/build-macos-v2.yml"
-
 permissions:
   contents: read
-
 jobs:
   build:
     runs-on: macos-15
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - name: Checkout DuskBloom
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
-      - name: Install build tools
-        run: python -m pip install --upgrade pip pyinstaller pillow pymupdf python-docx pyttsx3
-
-      - name: Build macOS apps
+      - name: Build native macOS suite
         run: bash macOS/BUILD_MACOS_RELEASE.sh
-
-      - name: Verify release
-        run: test -f DuskBloom_macOS_v2.0.0.zip
-
+      - name: Verify native apps
+        run: |
+          test -x "release_macos/DuskBloom Screen.app/Contents/MacOS/DuskBloom Screen"
+          test -x "release_macos/DuskBloom Center.app/Contents/MacOS/DuskBloom Center"
+          test -x "release_macos/DuskBloom Reader.app/Contents/MacOS/DuskBloom Reader"
+          test -f DuskBloom_macOS_v2.0.0.zip
       - name: Upload macOS release
         uses: actions/upload-artifact@v4
         with:
