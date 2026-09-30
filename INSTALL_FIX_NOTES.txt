@@ -1,1 +1,0 @@
-DuskBloom Center v1.0.1\n\nThis build verifies that Screen, Web, and Sonar packages are physically bundled into the built app before launch.\nInstall buttons use the bundled package path and report the exact missing path if a package is absent.\nSonar v15.2.0, Screen v3.4.4, Web v1.1.0.\n
