@@ -67,7 +67,7 @@ final class AppDelegate:NSObject,NSApplicationDelegate {
         m.addItem(.separator())
         let pm=NSMenu(); for (i,p) in presets.enumerated(){ let x=NSMenuItem(title:p.name,action:#selector(setPreset(_:)),keyEquivalent:""); x.target=self;x.tag=i;x.state=i==presetIndex ? .on:.off;pm.addItem(x)}
         let pr=NSMenuItem(title:"Preset",action:nil,keyEquivalent:"");pr.submenu=pm;m.addItem(pr)
-        let im=NSMenu(); for v in [50,75,100,125,150] { let x=NSMenuItem(title:"\(v)%",action:#selector(setIntensity(_:)),keyEquivalent:"");x.target=self;x.tag=v;x.state=Int(intensity*100)==v ? .on:.off;im.addItem(x)}
+        let im=NSMenu(); for v in [10,20,30,40,50,60,70,80,90,100,110,125,150,175,200] { let x=NSMenuItem(title:"\(v)%",action:#selector(setIntensity(_:)),keyEquivalent:"");x.target=self;x.tag=v;x.state=Int(intensity*100)==v ? .on:.off;im.addItem(x)}
         let ir=NSMenuItem(title:"Intensity",action:nil,keyEquivalent:"");ir.submenu=im;m.addItem(ir)
         m.addItem(.separator())
         let login=NSMenuItem(title:"Open at Login…",action:#selector(openLoginItems),keyEquivalent:"");login.target=self;m.addItem(login)
