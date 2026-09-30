@@ -33,7 +33,7 @@ let presets=[
 final class OverlayWindow: NSWindow {
  init(screen:NSScreen) {
   super.init(contentRect:screen.frame,styleMask:.borderless,backing:.buffered,defer:false)
-  isOpaque=false; backgroundColor=.clear; ignoresMouseEvents=true; hasShadow=false
+  isOpaque = false; backgroundColor = .clear; ignoresMouseEvents = true; hasShadow = false
   level=NSWindow.Level(rawValue:Int(CGWindowLevelForKey(.screenSaverWindow)))
   collectionBehavior=[.canJoinAllSpaces,.stationary,.ignoresCycle,.fullScreenAuxiliary]
   orderFrontRegardless()
@@ -150,7 +150,7 @@ final class AppDelegate:NSObject,NSApplicationDelegate {
  @objc func toggleRestore(){restoreLast.toggle();save();rebuildMenu()}
  @objc func toggleStartPaused(){startPaused.toggle();save();rebuildMenu()}
  func profileName(_ tag:Int)->String?{let a=profiles.keys.sorted();return tag>=0 && tag<a.count ? a[tag]:nil}
- @objc func saveProfile(){let a=NSAlert();a.messageText="Save Current as Profile";a.informativeText="Enter a profile name:";let f=NSTextField(frame:NSRect(x:0,y:0,width:240,height:24));f.stringValue="My Profile";a.accessoryView=f;a.addButton(withTitle:"Save");a.addButton(withTitle:"Cancel");if a.runModal()==.alertFirstButtonReturn{let n=f.stringValue.trimmingCharacters(in:.whitespacesAndNewlines);if !n.isEmpty{profiles[n]=Profile(filter:filter,intensity:intensity,whitePoint:whitePoint);save();rebuildMenu()}}}
+ @objc func saveProfile(){let a=NSAlert();a.messageText="Save Current as Profile";a.informativeText="Enter a profile name:";let f=NSTextField(frame:NSRect(x:0,y:0,width:240,height:24));f.stringValue="My Profile";a.accessoryView=f;a.addButton(withTitle:"Save");a.addButton(withTitle:"Cancel");if a.runModal() == .alertFirstButtonReturn{let n=f.stringValue.trimmingCharacters(in:.whitespacesAndNewlines);if !n.isEmpty{profiles[n]=Profile(filter:filter,intensity:intensity,whitePoint:whitePoint);save();rebuildMenu()}}}
  @objc func loadProfile(_ s:NSMenuItem){guard let n=profileName(s.tag),let p=profiles[n] else{return};filter=p.filter;intensity=p.intensity;whitePoint=p.whitePoint;enabled=true;perMonitor=false;apply()}
  @objc func deleteProfile(_ s:NSMenuItem){guard let n=profileName(s.tag) else{return};profiles.removeValue(forKey:n);if startupProfile==n{startupProfile=""};save();rebuildMenu()}
  @objc func setStartupProfile(_ s:NSMenuItem){startupProfile=s.tag == -1 ? "" : (profileName(s.tag) ?? "");save();rebuildMenu()}
