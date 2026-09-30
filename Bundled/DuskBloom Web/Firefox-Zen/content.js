@@ -13,6 +13,39 @@
   pink:{bg:"#321827",panel:"#542a42",raised:"#743a5c",text:"#fff",muted:"#edc4d8",accent:"#ff9dcc"},
   dark_pink:{bg:"#180a12",panel:"#351526",raised:"#55203d",text:"#fff",muted:"#d9aec2",accent:"#eb70ad"},
   rose_dim:{bg:"#28161c",panel:"#44262f",raised:"#603742",text:"#fff",muted:"#d9bbc2",accent:"#e18fa4"},
+  dusty_rose:{bg:"#21151a",panel:"#38252c",raised:"#523640",text:"#fff",muted:"#d9c0c8",accent:"#d58fa5"},
+  peach:{bg:"#2b1b15",panel:"#493026",raised:"#684538",text:"#fff",muted:"#ead0c2",accent:"#f2a47e"},
+  sepia:{bg:"#201a12",panel:"#393024",raised:"#554837",text:"#fff",muted:"#d8c9ae",accent:"#c9a873"},
+  sage:{bg:"#141b14",panel:"#263326",raised:"#3b4c3a",text:"#fff",muted:"#c5d3c1",accent:"#91b58b"},
+  soft_cyan:{bg:"#101b1c",panel:"#203537",raised:"#315054",text:"#fff",muted:"#c1d8d9",accent:"#83bec1"},
+  mauve:{bg:"#1d151d",panel:"#352635",raised:"#4e394c",text:"#fff",muted:"#d4c0d0",accent:"#b985b2"},
+  smoke:{bg:"#151619",panel:"#292b30",raised:"#40434a",text:"#fff",muted:"#c7c9ce",accent:"#9ca1aa"},
+  cocoa:{bg:"#1b1412",panel:"#302420",raised:"#493630",text:"#fff",muted:"#d4c4bd",accent:"#a77d6f"},
+  navy:{bg:"#0c111c",panel:"#18243a",raised:"#263855",text:"#fff",muted:"#bdc9dc",accent:"#6f8fc4"},
+  burgundy:{bg:"#1a0b0f",panel:"#34151e",raised:"#50202d",text:"#fff",muted:"#d9bac3",accent:"#b85d78"},
+  lavender:{bg:"#171023",panel:"#32204b",raised:"#513471",text:"#fff",muted:"#d1bce7",accent:"#c08cff"},
+  amber:{bg:"#261804",panel:"#493008",raised:"#6a470e",text:"#fff",muted:"#e5c98f",accent:"#ffb62f"},
+  forest_green:{bg:"#0b1810",panel:"#173723",raised:"#23553a",text:"#fff",muted:"#b7d7c0",accent:"#63d28b"},
+  warm_white:{bg:"#332c24",panel:"#514538",raised:"#6b5b49",text:"#fff",muted:"#e2d4c2",accent:"#efc486"},
+  deep_red:{bg:"#1d0709",panel:"#401018",raised:"#631724",text:"#fff",muted:"#dfb0b6",accent:"#ed6273"},
+  blue_light:{bg:"#0b1724",panel:"#173650",raised:"#245678",text:"#fff",muted:"#bdd8e8",accent:"#69c0f0"},
+  dark_dimmer:{bg:"#131317",panel:"#292930",raised:"#41414c",text:"#fff",muted:"#c6c6cf",accent:"#aaa8bd"},
+  midnight:{bg:"#060d1c",panel:"#102442",raised:"#183c69",text:"#fff",muted:"#b7cae5",accent:"#6da3ed"},
+  obsidian:{bg:"#07070a",panel:"#111116",raised:"#1d1d24",text:"#fff",muted:"#bbb2bc",accent:"#d19bbc"}
+ };) => {
+ const KEY=`mf44:${location.hostname}`;
+ const ID="mf44-theme";
+ const ON="data-mf44-on";
+ const DEFAULTS={
+  enabled:true,preset:"obsidian",
+  customBg:"#171018",customPanel:"#241925",customRaised:"#332336",
+  customText:"#ffffff",customMuted:"#cbb9c6",customAccent:"#e7a1c6"
+ };
+ const P={
+  pink_blackout:{bg:"#090609",panel:"#1b0e17",raised:"#34182a",text:"#fff",muted:"#d8b8c8",accent:"#ff77b5"},
+  pink:{bg:"#321827",panel:"#542a42",raised:"#743a5c",text:"#fff",muted:"#edc4d8",accent:"#ff9dcc"},
+  dark_pink:{bg:"#180a12",panel:"#351526",raised:"#55203d",text:"#fff",muted:"#d9aec2",accent:"#eb70ad"},
+  rose_dim:{bg:"#28161c",panel:"#44262f",raised:"#603742",text:"#fff",muted:"#d9bbc2",accent:"#e18fa4"},
   lavender:{bg:"#171023",panel:"#32204b",raised:"#513471",text:"#fff",muted:"#d1bce7",accent:"#c08cff"},
   amber:{bg:"#261804",panel:"#493008",raised:"#6a470e",text:"#fff",muted:"#e5c98f",accent:"#ffb62f"},
   forest_green:{bg:"#0b1810",panel:"#173723",raised:"#23553a",text:"#fff",muted:"#b7d7c0",accent:"#63d28b"},
