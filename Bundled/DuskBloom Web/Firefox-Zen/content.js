@@ -1,11 +1,6 @@
 
 (() => {
- 
- const duskBloomMediaGuard=document.createElement("style");
- duskBloomMediaGuard.id="duskbloom-v54-media-guard";
- duskBloomMediaGuard.textContent="\n/* DuskBloom v54 final media guard: keep container coverage without painting over media. */\nhtml.mf44-on img,\nhtml.mf44-on picture,\nhtml.mf44-on picture *,\nhtml.mf44-on video,\nhtml.mf44-on canvas,\nhtml.mf44-on svg,\nhtml.mf44-on svg *,\nhtml.mf44-on [role=\"img\"],\nhtml.mf44-on .ic-avatar,\nhtml.mf44-on .avatar,\nhtml.mf44-on [class*=\"avatar\"],\nhtml.mf44-on [class*=\"thumbnail\"],\nhtml.mf44-on [class*=\"image\"] img {\n  filter:none !important;\n  -webkit-filter:none !important;\n  mix-blend-mode:normal !important;\n  background-color:transparent !important;\n  opacity:1 !important;\n  visibility:visible !important;\n}\nhtml.mf44-on [style*=\"background-image\"],\nhtml.mf44-on [class*=\"hero\"],\nhtml.mf44-on [class*=\"banner\"] {\n  background-image:revert !important;\n}\n";
- (document.head||document.documentElement).appendChild(duskBloomMediaGuard);
-const KEY=`mf44:${location.hostname}`;
+ const KEY=`mf44:${location.hostname}`;
  const ID="mf44-theme";
  const ON="data-mf44-on";
  const DEFAULTS={
@@ -142,14 +137,14 @@ const KEY=`mf44:${location.hostname}`;
      html[data-mf44-on="1"] .kix-editor,
      html[data-mf44-on="1"] .kix-page-paginated,
      html[data-mf44-on="1"] .kix-page-paginated-container {
-       background:var(--mf-bg,#111216) !important;
+       background:#111216 !important;
      }
 
      html[data-mf44-on="1"] .kix-page,
      html[data-mf44-on="1"] .kix-page-content-wrapper,
      html[data-mf44-on="1"] .kix-page-content {
-       background:var(--mf-panel,#18191e) !important;
-       background-color:var(--mf-panel,#18191e) !important;
+       background:#18191e !important;
+       background-color:#18191e !important;
        box-shadow:0 0 0 1px #393a42,0 10px 32px rgba(0,0,0,.38) !important;
      }
 
@@ -158,11 +153,11 @@ const KEY=`mf44:${location.hostname}`;
        .kix-wordhtmlgenerator-word-node,.kix-lineview-text-block span,
        .kix-lineview-content span
      ){
-       color:var(--mf-text,#ffffff) !important;
-       -webkit-text-fill-color:var(--mf-text,#ffffff) !important;
+       color:#ffffff !important;
+       -webkit-text-fill-color:#ffffff !important;
      }
 
-     html[data-mf44-on="1"] .kix-cursor-caret{border-color:var(--mf-accent,#ffb6d6) !important}
+     html[data-mf44-on="1"] .kix-cursor-caret{border-color:#ffb6d6 !important}
      html[data-mf44-on="1"] :is(.kix-selection-overlay,.kix-selection-overlay-container){
        mix-blend-mode:screen !important;
      }
@@ -175,8 +170,8 @@ const KEY=`mf44:${location.hostname}`;
        .docs-material-gm-select-outer-box,.docs-material-gm-select-inner-box
      ){
        background-color:var(--mf-panel,#111116) !important;
-       color:var(--mf-text,#ffffff) !important;
-       border-color:var(--mf-muted,#55515c) !important;
+       color:#ffffff !important;
+       border-color:#55515c !important;
      }
 
      html[data-mf44-on="1"] :is(
@@ -184,10 +179,10 @@ const KEY=`mf44:${location.hostname}`;
        .docs-titlebar .docs-title-input,input.docs-title-input
      ){
        background-color:var(--mf-panel,#111116) !important;
-       color:var(--mf-text,#ffffff) !important;
-       -webkit-text-fill-color:var(--mf-text,#ffffff) !important;
-       caret-color:var(--mf-accent,#ffb6d6) !important;
-       border-color:var(--mf-muted,#55515c) !important;
+       color:#ffffff !important;
+       -webkit-text-fill-color:#ffffff !important;
+       caret-color:#ffb6d6 !important;
+       border-color:#55515c !important;
        opacity:1 !important;
      }
 
@@ -1253,383 +1248,4 @@ const KEY=`mf44:${location.hostname}`;
   browser.runtime.onMessage.addListener(msg=>{
     if(msg?.type==="MF44_SET") apply(msg.settings||{enabled:true});
   });
-})();
-
-
-/* ============================================================
-   DUSKBLOOM READABILITY GUARD
-   Final text/form contrast pass. Keeps v54 layout/media logic intact.
-   ============================================================ */
-(() => {
-  const ID = "duskbloom-readability-guard";
-  const install = () => {
-    document.getElementById(ID)?.remove();
-    const st = document.createElement("style");
-    st.id = ID;
-    st.textContent = `
-      html[data-mf44-on="1"] :is(
-        p,li,dd,dt,blockquote,figcaption,caption,label,legend,
-        h1,h2,h3,h4,h5,h6,th,td
-      ) {
-        color:var(--mf-text)!important;
-        -webkit-text-fill-color:var(--mf-text)!important;
-        text-shadow:none!important;
-        opacity:1!important;
-      }
-
-      html[data-mf44-on="1"] :is(
-        small,.text-muted,.muted,[class*="secondary" i],[class*="subtitle" i],
-        [class*="description" i],[class*="meta" i]
-      ) {
-        color:var(--mf-muted)!important;
-        -webkit-text-fill-color:var(--mf-muted)!important;
-        opacity:1!important;
-      }
-
-      html[data-mf44-on="1"] :is(a,a:visited) {
-        color:var(--mf-accent)!important;
-        -webkit-text-fill-color:var(--mf-accent)!important;
-        opacity:1!important;
-      }
-
-      html[data-mf44-on="1"] :is(
-        input:not([type="color"]):not([type="range"]):not([type="checkbox"]):not([type="radio"]),
-        textarea,select,[contenteditable="true"],[role="textbox"]
-      ) {
-        background-color:var(--mf-panel)!important;
-        color:var(--mf-text)!important;
-        -webkit-text-fill-color:var(--mf-text)!important;
-        caret-color:var(--mf-accent)!important;
-        border-color:color-mix(in srgb,var(--mf-muted) 45%,transparent)!important;
-        opacity:1!important;
-      }
-
-      html[data-mf44-on="1"] :is(input,textarea)::placeholder {
-        color:var(--mf-muted)!important;
-        -webkit-text-fill-color:var(--mf-muted)!important;
-        opacity:.9!important;
-      }
-
-      html[data-mf44-on="1"] :is(button,[role="button"]) {
-        color:var(--mf-text)!important;
-        -webkit-text-fill-color:var(--mf-text)!important;
-      }
-
-      /* Preserve actual media and graphical artwork. */
-      html[data-mf44-on="1"] :is(img,picture,video,canvas,svg,[role="img"]) {
-        -webkit-text-fill-color:initial!important;
-        text-shadow:initial!important;
-      }
-
-      /* Google Docs: readable page text/caret without flattening document media. */
-      html[data-mf44-on="1"] .kix-appview-editor,
-      html[data-mf44-on="1"] .kix-appview-editor-container,
-      html[data-mf44-on="1"] .kix-page,
-      html[data-mf44-on="1"] .kix-page-content-wrapper {
-        background-color:var(--mf-panel)!important;
-      }
-      html[data-mf44-on="1"] .docs-title-input,
-      html[data-mf44-on="1"] .docs-title-input-label {
-        color:var(--mf-text)!important;
-        -webkit-text-fill-color:var(--mf-text)!important;
-      }
-
-      /* Canvas: keep body/course text readable even when Canvas supplies
-         inline gray text colors. v53/v54 still own navigation/top-bar styling. */
-      html[data-mf44-on="1"] :is(
-        #content,#content-wrapper,#course_home_content,
-        .user_content,.show-content,.assignment-description,
-        .discussion_entry,.message_wrapper
-      ) :is(p,li,dd,dt,h1,h2,h3,h4,h5,h6,span:not([class*="icon" i])) {
-        color:var(--mf-text)!important;
-        -webkit-text-fill-color:var(--mf-text)!important;
-        opacity:1!important;
-      }
-    `;
-    (document.head || document.documentElement).appendChild(st);
-  };
-
-  const remove = () => document.getElementById(ID)?.remove();
-  const KEY = `mf44:${location.hostname}`;
-  const sync = settings => settings?.enabled === false ? remove() : install();
-
-  browser.storage.local.get(KEY).then(d => sync({enabled:true,...(d[KEY]||{})}));
-  browser.storage.onChanged.addListener((changes, area) => {
-    if (area === "local" && changes[KEY]) sync({enabled:true,...(changes[KEY].newValue||{})});
-  });
-  browser.runtime.onMessage.addListener(msg => {
-    if (msg?.type === "MF44_SET") sync(msg.settings || {enabled:true});
-  });
-})();
-
-
-/* ============================================================
-   V55 — CANVAS COHERENT THEME + READABILITY
-   Canvas/Better Canvas may inject its own colors after page load. This pass
-   makes the course shell, sidebars, syllabus/tables and text use the selected
-   DuskBloom palette as one coherent theme while preserving real media.
-   ============================================================ */
-(() => {
-  if(!/(^|\.)instructure\.com$/i.test(location.hostname)) return;
-  const KEY=\`mf44:\${location.hostname}\`, ID="mf55-canvas-coherent";
-  const remove=()=>document.getElementById(ID)?.remove();
-
-  function apply(s){
-    remove(); if(s?.enabled===false) return;
-    const st=document.createElement("style"); st.id=ID;
-    st.textContent=\`
-      /* Canvas page shells */
-      html[data-mf44-on="1"] :is(
-        body,#application,#wrapper,#main,#not_right_side,#content-wrapper,
-        .ic-app,.ic-app-main-content,.ic-Layout-wrapper,.ic-Layout-contentWrapper,
-        .ic-Layout-contentMain
-      ){
-        background:var(--mf-bg)!important;
-        background-color:var(--mf-bg)!important;
-        color:var(--mf-text)!important;
-      }
-
-      /* Global + course navigation. Override Canvas and Better Canvas colors. */
-      html[data-mf44-on="1"] :is(
-        #global_nav,#menu,.ic-app-header,.ic-app-header__main-navigation,
-        .ic-app-header__menu-list,.ic-app-header__menu-list-item,
-        #left-side,#section-tabs,#section-tabs > li
-      ){
-        background:var(--mf-panel)!important;
-        background-color:var(--mf-panel)!important;
-        border-color:color-mix(in srgb,var(--mf-muted) 28%,transparent)!important;
-      }
-      html[data-mf44-on="1"] :is(
-        .ic-app-header__menu-list-link,#section-tabs a,#section-tabs button
-      ){
-        background:transparent!important;
-        background-color:transparent!important;
-        color:var(--mf-muted)!important;
-        -webkit-text-fill-color:var(--mf-muted)!important;
-        opacity:1!important;
-        box-shadow:none!important;
-      }
-      html[data-mf44-on="1"] :is(
-        .ic-app-header__menu-list-link:hover,.ic-app-header__menu-list-link:focus,
-        .ic-app-header__menu-list-link:active,
-        #section-tabs a:hover,#section-tabs a:focus,#section-tabs a.active,
-        #section-tabs a[aria-current="page"]
-      ){
-        background:var(--mf-raised)!important;
-        background-color:var(--mf-raised)!important;
-        color:var(--mf-text)!important;
-        -webkit-text-fill-color:var(--mf-text)!important;
-      }
-
-      /* Right sidebar / course sidebar — no Better Canvas peach/white blocks. */
-      html[data-mf44-on="1"] :is(
-        #right-side-wrapper,#right-side,.ic-Layout-contentSecondary,
-        .course-options,.course-options *,
-        .todo-list,.todo-list-header,.todo-list-item,
-        [class*="ToDoSidebar" i],[class*="CourseSidebar" i]
-      ):not(img):not(picture):not(video):not(canvas):not(svg){
-        background-color:var(--mf-panel)!important;
-        color:var(--mf-text)!important;
-        border-color:color-mix(in srgb,var(--mf-muted) 32%,transparent)!important;
-      }
-
-      /* Course content containers. Catch the pieces that were alternating
-         between Better Canvas black, peach and Canvas white. */
-      html[data-mf44-on="1"] #content :is(
-        section,article,aside,fieldset,details,dialog,
-        .content,.user_content,.show-content,.syllabus,
-        .syllabus_assignment,.syllabus_assignment_group,
-        .header-bar,.page-toolbar,.form-actions,.module-sequence-footer-content,
-        .panel,.well,.alert,.ui-widget-content,.ui-dialog-content,
-        [class*="container" i],[class*="panel" i],[class*="card" i]
-      ):not([style*="background-image"]){
-        background-color:var(--mf-panel)!important;
-        color:var(--mf-text)!important;
-        border-color:color-mix(in srgb,var(--mf-muted) 30%,transparent)!important;
-      }
-
-      /* Syllabus/schedule tables: every cell gets a dark readable surface.
-         This fixes the bright white rows visible in the screenshot. */
-      html[data-mf44-on="1"] #content :is(table,thead,tbody,tfoot,tr,th,td),
-      html[data-mf44-on="1"] #right-side :is(table,thead,tbody,tfoot,tr,th,td),
-      html[data-mf44-on="1"] #right-side-wrapper :is(table,thead,tbody,tfoot,tr,th,td){
-        background:var(--mf-panel)!important;
-        background-color:var(--mf-panel)!important;
-        color:var(--mf-text)!important;
-        -webkit-text-fill-color:var(--mf-text)!important;
-        border-color:color-mix(in srgb,var(--mf-muted) 34%,transparent)!important;
-        opacity:1!important;
-      }
-      html[data-mf44-on="1"] #content :is(thead th,[role="columnheader"]),
-      html[data-mf44-on="1"] #content :is(tr):nth-child(even) > :is(td,th){
-        background:var(--mf-raised)!important;
-        background-color:var(--mf-raised)!important;
-      }
-
-      /* Readability: Canvas and Better Canvas frequently set colors inline on
-         nested spans/divs. Reassert text only; don't recolor icon/media nodes. */
-      html[data-mf44-on="1"] :is(
-        #content,#left-side,#right-side,#right-side-wrapper,#section-tabs
-      ) :is(
-        p,li,dd,dt,label,legend,blockquote,figcaption,
-        h1,h2,h3,h4,h5,h6,th,td,
-        span:not([class*="icon" i]):not([role="img"]),
-        div[class*="text" i],div[class*="title" i],div[class*="description" i]
-      ){
-        color:var(--mf-text)!important;
-        -webkit-text-fill-color:var(--mf-text)!important;
-        text-shadow:none!important;
-        opacity:1!important;
-      }
-      html[data-mf44-on="1"] :is(#content,#left-side,#right-side,#right-side-wrapper) a{
-        color:var(--mf-accent)!important;
-        -webkit-text-fill-color:var(--mf-accent)!important;
-        opacity:1!important;
-      }
-      html[data-mf44-on="1"] :is(
-        #content,#left-side,#right-side,#right-side-wrapper
-      ) :is(small,.muted,.text-muted,[class*="secondary" i],[class*="meta" i]){
-        color:var(--mf-muted)!important;
-        -webkit-text-fill-color:var(--mf-muted)!important;
-      }
-
-      /* Inputs/buttons */
-      html[data-mf44-on="1"] :is(
-        #content,#left-side,#right-side,#right-side-wrapper
-      ) :is(
-        button,[role="button"],input:not([type="checkbox"]):not([type="radio"]),
-        textarea,select,.btn,.Button
-      ){
-        background:var(--mf-raised)!important;
-        background-color:var(--mf-raised)!important;
-        color:var(--mf-text)!important;
-        -webkit-text-fill-color:var(--mf-text)!important;
-        border-color:color-mix(in srgb,var(--mf-muted) 42%,transparent)!important;
-      }
-
-      /* Preserve real media/course art. */
-      html[data-mf44-on="1"] :is(
-        img,picture,video,canvas,[role="img"],
-        .ic-DashboardCard__header,.ic-DashboardCard__header_hero,
-        .ic-DashboardCard__header_image,[style*="background-image"]
-      ){
-        filter:none!important;
-        -webkit-filter:none!important;
-        mix-blend-mode:normal!important;
-        opacity:1!important;
-        visibility:visible!important;
-      }
-      html[data-mf44-on="1"] :is(
-        .ic-DashboardCard__header,.ic-DashboardCard__header_hero,
-        .ic-DashboardCard__header_image,[style*="background-image"]
-      ){
-        background-color:transparent!important;
-      }
-    \`;
-    (document.head||document.documentElement).appendChild(st);
-  }
-
-  browser.storage.local.get(KEY).then(d=>apply({enabled:true,...(d[KEY]||{})}));
-  browser.storage.onChanged.addListener((c,a)=>{
-    if(a==="local"&&c[KEY]) apply({enabled:true,...(c[KEY].newValue||{})});
-  });
-  browser.runtime.onMessage.addListener(msg=>{
-    if(msg?.type==="MF44_SET") apply(msg.settings||{enabled:true});
-  });
-})();
-
-
-/* ============================================================
-   V56 — CANVAS ALL-CONTAINER FINAL PASS
-   Final authority after Canvas + Better Canvas. Covers generic nested
-   containers, InstUI wrappers and dynamically inserted syllabus/sidebar UI.
-   Real media and CSS artwork remain untouched.
-   ============================================================ */
-(() => {
- if(!/(^|\.)instructure\.com$/i.test(location.hostname)) return;
- const KEY=\`mf44:\${location.hostname}\`, ID="mf56-canvas-all-containers";
- const remove=()=>document.getElementById(ID)?.remove();
- function apply(settings){
-  remove(); if(settings?.enabled===false) return;
-  const st=document.createElement("style"); st.id=ID;
-  st.textContent=\`
-   /* Every structural Canvas surface, including generic InstUI div wrappers. */
-   html[data-mf44-on="1"] :is(
-    #application,#wrapper,#main,#not_right_side,#content-wrapper,#content,
-    #left-side,#right-side,#right-side-wrapper,
-    .ic-app,.ic-app-main-content,.ic-Layout-wrapper,.ic-Layout-contentWrapper,
-    .ic-Layout-contentMain,.ic-Layout-contentSecondary,
-    #content > div,#content > div > div,
-    #right-side > div,#right-side-wrapper > div,
-    section,article,aside,fieldset,details,dialog,
-    [role="main"],[role="region"],[role="tabpanel"],[role="dialog"],
-    [role="menu"],[role="listbox"],[role="option"],
-    [class*="container" i],[class*="wrapper" i],[class*="panel" i],
-    [class*="content" i],[class*="module" i],[class*="item" i],
-    [class*="list" i],[class*="row" i],[class*="card" i],
-    [class*="sidebar" i],[class*="syllabus" i],[class*="assignment" i],
-    [class*="announcement" i],[class*="todo" i],[class*="popover" i],
-    [class*="modal" i],[class*="dialog" i],[class*="toolbar" i]
-   ):not([style*="background-image"]):not(.ic-DashboardCard__header):
-     not(.ic-DashboardCard__header_hero):not(.ic-DashboardCard__header_image){
-    background-color:var(--mf-panel)!important;
-    color:var(--mf-text)!important;
-    border-color:color-mix(in srgb,var(--mf-muted) 30%,transparent)!important;
-   }
-
-   /* Base page remains the deepest theme color. */
-   html[data-mf44-on="1"] :is(body,#application,#wrapper,#main,#not_right_side){
-    background:var(--mf-bg)!important;background-color:var(--mf-bg)!important;
-   }
-
-   /* Generic nested blocks that Canvas/Better Canvas leaves white/peach. */
-   html[data-mf44-on="1"] :is(#content,#right-side,#right-side-wrapper)
-     > :is(div,section,article,aside),
-   html[data-mf44-on="1"] :is(#content,#right-side,#right-side-wrapper)
-     > :is(div,section,article,aside) > :is(div,section,article,aside){
-    background-color:var(--mf-panel)!important;color:var(--mf-text)!important;
-   }
-
-   /* All tables/cells, including syllabus rows dynamically inserted later. */
-   html[data-mf44-on="1"] :is(#content,#right-side,#right-side-wrapper)
-     :is(table,thead,tbody,tfoot,tr,th,td){
-    background:var(--mf-panel)!important;background-color:var(--mf-panel)!important;
-    color:var(--mf-text)!important;-webkit-text-fill-color:var(--mf-text)!important;
-    border-color:color-mix(in srgb,var(--mf-muted) 34%,transparent)!important;
-    opacity:1!important;
-   }
-   html[data-mf44-on="1"] :is(#content,#right-side,#right-side-wrapper)
-     tr:nth-child(even) > :is(td,th){
-    background:var(--mf-raised)!important;background-color:var(--mf-raised)!important;
-   }
-
-   /* Text always wins over inline Better Canvas/Canvas colors. */
-   html[data-mf44-on="1"] :is(#content,#left-side,#right-side,#right-side-wrapper)
-     :is(p,li,dd,dt,label,legend,small,strong,em,b,blockquote,figcaption,
-         h1,h2,h3,h4,h5,h6,th,td,
-         span:not([class*="icon" i]):not([role="img"])){
-    color:var(--mf-text)!important;-webkit-text-fill-color:var(--mf-text)!important;
-    opacity:1!important;text-shadow:none!important;
-   }
-   html[data-mf44-on="1"] :is(#content,#left-side,#right-side,#right-side-wrapper) a{
-    color:var(--mf-accent)!important;-webkit-text-fill-color:var(--mf-accent)!important;
-   }
-
-   /* Final media/artwork escape hatch. */
-   html[data-mf44-on="1"] :is(img,picture,video,canvas,svg,[role="img"],
-     .ic-DashboardCard__header,.ic-DashboardCard__header_hero,
-     .ic-DashboardCard__header_image,[style*="background-image"]){
-    filter:none!important;-webkit-filter:none!important;mix-blend-mode:normal!important;
-    opacity:1!important;visibility:visible!important;
-   }
-   html[data-mf44-on="1"] :is(.ic-DashboardCard__header,.ic-DashboardCard__header_hero,
-     .ic-DashboardCard__header_image,[style*="background-image"]){
-    background-color:transparent!important;
-   }
-  \`;
-  (document.head||document.documentElement).appendChild(st);
- }
- browser.storage.local.get(KEY).then(d=>apply({enabled:true,...(d[KEY]||{})}));
- browser.storage.onChanged.addListener((c,a)=>{if(a==="local"&&c[KEY])apply({enabled:true,...(c[KEY].newValue||{})})});
- browser.runtime.onMessage.addListener(msg=>{if(msg?.type==="MF44_SET")apply(msg.settings||{enabled:true})});
 })();
