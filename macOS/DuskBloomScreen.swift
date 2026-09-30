@@ -1,12 +1,30 @@
 import Cocoa
 
 struct Preset { let name:String; let color:NSColor; let alpha:CGFloat }
-let presets:[Preset] = [
-    .init(name:"Soft Pink",color:NSColor(calibratedRed:0.84,green:0.49,blue:0.61,alpha:1),alpha:0.16),
-    .init(name:"Reading Comfort",color:NSColor(calibratedRed:0.89,green:0.78,blue:0.67,alpha:1),alpha:0.11),
-    .init(name:"Study",color:NSColor(calibratedRed:1.0,green:0.94,blue:0.78,alpha:1),alpha:0.09),
-    .init(name:"Night",color:NSColor(calibratedRed:0.055,green:0.047,blue:0.086,alpha:1),alpha:0.34),
-    .init(name:"Migraine",color:NSColor(calibratedRed:0.03,green:0.03,blue:0.045,alpha:1),alpha:0.48)
+let presets: [Preset] = [
+    .init(name: "Pink Blackout", color: NSColor(calibratedRed: 214/255, green: 126/255, blue: 156/255, alpha: 1), alpha: 0.16),
+    .init(name: "Pink", color: NSColor(calibratedRed: 235/255, green: 154/255, blue: 184/255, alpha: 1), alpha: 0.15),
+    .init(name: "Dark Pink", color: NSColor(calibratedRed: 155/255, green: 75/255, blue: 108/255, alpha: 1), alpha: 0.18),
+    .init(name: "Rose Dim", color: NSColor(calibratedRed: 190/255, green: 112/255, blue: 135/255, alpha: 1), alpha: 0.17),
+    .init(name: "Lavender", color: NSColor(calibratedRed: 143/255, green: 116/255, blue: 166/255, alpha: 1), alpha: 0.16),
+    .init(name: "Amber", color: NSColor(calibratedRed: 214/255, green: 153/255, blue: 73/255, alpha: 1), alpha: 0.14),
+    .init(name: "Forest Green", color: NSColor(calibratedRed: 70/255, green: 105/255, blue: 76/255, alpha: 1), alpha: 0.18),
+    .init(name: "Warm White", color: NSColor(calibratedRed: 255/255, green: 224/255, blue: 180/255, alpha: 1), alpha: 0.10),
+    .init(name: "Deep Red", color: NSColor(calibratedRed: 105/255, green: 28/255, blue: 36/255, alpha: 1), alpha: 0.22),
+    .init(name: "Blue Light", color: NSColor(calibratedRed: 78/255, green: 111/255, blue: 148/255, alpha: 1), alpha: 0.17),
+    .init(name: "Dark Dimmer", color: NSColor(calibratedRed: 20/255, green: 20/255, blue: 20/255, alpha: 1), alpha: 0.34),
+    .init(name: "Midnight", color: NSColor(calibratedRed: 14/255, green: 12/255, blue: 22/255, alpha: 1), alpha: 0.40),
+    .init(name: "Obsidian", color: NSColor(calibratedRed: 8/255, green: 8/255, blue: 12/255, alpha: 1), alpha: 0.46),
+    .init(name: "Dusty Rose", color: NSColor(calibratedRed: 166/255, green: 108/255, blue: 126/255, alpha: 1), alpha: 0.17),
+    .init(name: "Peach", color: NSColor(calibratedRed: 222/255, green: 157/255, blue: 126/255, alpha: 1), alpha: 0.14),
+    .init(name: "Sepia", color: NSColor(calibratedRed: 150/255, green: 121/255, blue: 86/255, alpha: 1), alpha: 0.18),
+    .init(name: "Sage", color: NSColor(calibratedRed: 116/255, green: 139/255, blue: 112/255, alpha: 1), alpha: 0.16),
+    .init(name: "Soft Cyan", color: NSColor(calibratedRed: 112/255, green: 151/255, blue: 153/255, alpha: 1), alpha: 0.15),
+    .init(name: "Mauve", color: NSColor(calibratedRed: 130/255, green: 96/255, blue: 125/255, alpha: 1), alpha: 0.18),
+    .init(name: "Smoke", color: NSColor(calibratedRed: 92/255, green: 96/255, blue: 103/255, alpha: 1), alpha: 0.22),
+    .init(name: "Cocoa", color: NSColor(calibratedRed: 76/255, green: 55/255, blue: 50/255, alpha: 1), alpha: 0.24),
+    .init(name: "Navy", color: NSColor(calibratedRed: 35/255, green: 48/255, blue: 75/255, alpha: 1), alpha: 0.25),
+    .init(name: "Burgundy", color: NSColor(calibratedRed: 82/255, green: 34/255, blue: 48/255, alpha: 1), alpha: 0.25)
 ]
 
 final class OverlayWindow:NSWindow {
