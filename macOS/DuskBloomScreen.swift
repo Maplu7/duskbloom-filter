@@ -111,7 +111,13 @@ final class AppDelegate:NSObject,NSApplicationDelegate {
   if profiles.isEmpty {
    profiles=["Migraine":Profile(filter:"obsidian",intensity:18,whitePoint:true),"Study":Profile(filter:"warm_white",intensity:7,whitePoint:false),"Night":Profile(filter:"midnight",intensity:12,whitePoint:true),"Reading Comfort":Profile(filter:"reading",intensity:7,whitePoint:false)]
   }
-  if !startupProfile.isEmpty,let p=profiles[startupProfile]{filter=p.filter;intensity=p.intensity;whitePoint=p.whitePoint;enabled=true}
+ }
+ func applyLaunchOnlySettings() {
+  // Startup profile and Start Paused are launch behaviors only.
+  // External widget changes must never snap the filter back to a startup preset.
+  if !startupProfile.isEmpty,let p=profiles[startupProfile]{
+   filter=p.filter;intensity=p.intensity;whitePoint=p.whitePoint;enabled=true
+  }
   if startPaused { pausedUntil=Date.distantFuture }
  }
  func save() {
