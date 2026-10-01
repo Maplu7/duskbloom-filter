@@ -17,7 +17,7 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
 
     steps:
       - name: Checkout DuskBloom
@@ -28,20 +28,59 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Build DuskBloom Windows 2.1
+      - name: Build standalone Windows EXEs
         shell: cmd
         run: BUILD_WINDOWS_RELEASE.bat
 
-      - name: Verify release
+      - name: Verify every standalone EXE
         shell: pwsh
         run: |
-          if (!(Test-Path "DuskBloom_Windows_v2.1.0.zip")) { throw "Release ZIP was not created." }
-          Get-Item "DuskBloom_Windows_v2.1.0.zip" | Format-List Name,Length,LastWriteTime
+          $required = @(
+            "release_exes\DuskBloomCenter.exe",
+            "release_exes\DuskBloomScreen.exe",
+            "release_exes\DuskBloomReader.exe",
+            "release_exes\DuskBloomSonar.exe",
+            "DuskBloom_Windows_v2.1.0_EXEs.zip"
+          )
+          foreach ($file in $required) {
+            if (!(Test-Path $file)) { throw "Missing required build output: $file" }
+            $item = Get-Item $file
+            if ($item.Length -lt 100000) { throw "Build output looks invalid or too small: $file" }
+            Write-Host "OK  $($item.Name)  $($item.Length) bytes"
+          }
 
-      - name: Upload Windows release
+      - name: Upload DuskBloom Center EXE
         uses: actions/upload-artifact@v4
         with:
-          name: DuskBloom-Windows-v2.1.0
-          path: DuskBloom_Windows_v2.1.0.zip
+          name: DuskBloom-Center-v2.1.0
+          path: release_exes/DuskBloomCenter.exe
+          if-no-files-found: error
+
+      - name: Upload DuskBloom Screen EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: DuskBloom-Screen-v4.0.0
+          path: release_exes/DuskBloomScreen.exe
+          if-no-files-found: error
+
+      - name: Upload DuskBloom Reader EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: DuskBloom-Reader-v2.1.0
+          path: release_exes/DuskBloomReader.exe
+          if-no-files-found: error
+
+      - name: Upload DuskBloom Sonar EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: DuskBloom-Sonar-v15.2.0
+          path: release_exes/DuskBloomSonar.exe
+          if-no-files-found: error
+
+      - name: Upload complete EXE bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: DuskBloom-Windows-v2.1.0-EXEs
+          path: DuskBloom_Windows_v2.1.0_EXEs.zip
           if-no-files-found: error
           retention-days: 30
