@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "center": {
-    "version": "2.0.0",
+    "version": "2.1.0",
     "status": "ready",
-    "release_notes": "Low-memory Windows rebuild with verified startup registration and simplified rendering."
+    "release_notes": "Polished Windows suite: stable v54 Web with 23 colors, expanded Reader comfort controls, and larger Center dashboard."
   },
   "components": {
     "screen": {
@@ -14,14 +14,15 @@
     },
     "web": {
       "name": "DuskBloom Web",
-      "version": "2.0.0",
+      "version": "9.4.2",
       "ready": true,
       "channel": "stable"
     },
     "reader": {
       "name": "DuskBloom Reader",
-      "ready": false,
-      "status": "working"
+      "ready": true,
+      "version": "2.1.0",
+      "channel": "stable"
     },
     "pointer": {
       "name": "DuskBloom Pointer",
