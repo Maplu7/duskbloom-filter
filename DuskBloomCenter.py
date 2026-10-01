@@ -4,7 +4,7 @@ import os, sys, json, subprocess, zipfile, datetime, ctypes, webbrowser, time, s
 import wx
 import wx.adv
 
-APP_VERSION = '2.0.0'
+APP_VERSION = '2.1.0'
 APP_NAME = 'DuskBloom Center'
 BASE = os.path.join(os.getenv('APPDATA') or os.path.expanduser('~'), 'DuskBloom', 'Center')
 os.makedirs(BASE, exist_ok=True)
@@ -443,8 +443,8 @@ class DuskBloomTray(wx.adv.TaskBarIcon):
 
 class MainFrame(wx.Frame):
     def __init__(self):
-        super().__init__(None,title=f'{APP_NAME} {APP_VERSION}',size=(1180,790),style=wx.DEFAULT_FRAME_STYLE)
-        self.SetMinSize((980,680)); self.settings=load_settings(); self.current_page='Home'; self.tray=None
+        super().__init__(None,title=f'{APP_NAME} {APP_VERSION}',size=(1380,900),style=wx.DEFAULT_FRAME_STYLE)
+        self.SetMinSize((1120,740)); self.settings=load_settings(); self.current_page='Home'; self.tray=None
         self.set_palette(); self.SetBackgroundColour(self.bg)
         self.root=wx.BoxSizer(wx.HORIZONTAL)
         self.build_nav()
@@ -458,9 +458,9 @@ class MainFrame(wx.Frame):
         self.bg=rgb(t['bg']); self.surface=rgb(t['surface']); self.surface2=rgb(t['surface2']); self.accent=rgb(t['accent']); self.accent2=rgb(t['accent2']); self.text=rgb(t['text']); self.muted=rgb(t['muted'])
 
     def build_nav(self):
-        self.nav=wx.Panel(self); self.nav.SetMinSize((225,-1)); self.nav.SetBackgroundColour(self.surface)
+        self.nav=wx.Panel(self); self.nav.SetMinSize((250,-1)); self.nav.SetBackgroundColour(self.surface)
         ns=wx.BoxSizer(wx.VERTICAL)
-        brand=wx.StaticText(self.nav,label='DuskBloom  🌷'); brand.SetForegroundColour(self.text); brand.SetFont(wx.Font(20,wx.FONTFAMILY_DEFAULT,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_BOLD)); ns.Add(brand,0,wx.LEFT|wx.RIGHT|wx.TOP,22)
+        brand=wx.StaticText(self.nav,label='DuskBloom  🌷'); brand.SetForegroundColour(self.text); brand.SetFont(wx.Font(24,wx.FONTFAMILY_DEFAULT,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_BOLD)); ns.Add(brand,0,wx.LEFT|wx.RIGHT|wx.TOP,22)
         tag=wx.StaticText(self.nav,label='make your computer softer.'); tag.SetForegroundColour(self.muted); tag.SetFont(wx.Font(8,wx.FONTFAMILY_DEFAULT,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL)); ns.Add(tag,0,wx.LEFT|wx.RIGHT|wx.BOTTOM,23)
         self.nav_buttons={}
         for icon,name in [('⌂','Home'),('♡','Favorites'),('◉','Displays'),('✦','Profiles'),('▦','Components'),('↓','Install')]:
