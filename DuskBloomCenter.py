@@ -32,7 +32,7 @@ THEMES = {
 DEFAULTS = {
     'theme':'Cozy Pink', 'favorites':['DuskBloom Screen','DuskBloom Reader'],
     'smart_profiles':True, 'notifications':True, 'notification_level':'Normal',
-    'active_profile':'Everyday', 'comfort':58, 'start_with_windows':False,
+    'active_profile':'Everyday', 'comfort':58, 'start_with_windows':True,
     'reduced_motion':False, 'update_mode':'Ask me', 'minimize_to_tray':True,
     'monitor_levels':{}, 'profile_mode':'Suggest first',
     'update_feed_url':'', 'last_update_check':0, 'catalog_cache':{}
@@ -43,35 +43,67 @@ RUN_NAME = "DuskBloom Center"
 
 def _center_startup_command():
     if getattr(sys, 'frozen', False):
-        return f'"{sys.executable}" --startup'
+        return f'"{os.path.abspath(sys.executable)}" --startup'
     pyw=os.path.join(os.path.dirname(sys.executable),'pythonw.exe')
     runner=pyw if os.path.isfile(pyw) else sys.executable
-    return f'"{runner}" "{os.path.abspath(__file__)}" --startup'
+    return f'"{os.path.abspath(runner)}" "{os.path.abspath(__file__)}" --startup'
 
-def set_center_startup(enabled):
-    import winreg
+def _startup_folder():
+    return os.path.join(os.getenv('APPDATA') or '', 'Microsoft','Windows','Start Menu','Programs','Startup')
+
+def _startup_cmd_file():
+    return os.path.join(_startup_folder(),'DuskBloom Center.cmd')
+
+def _write_startup_folder_entry():
+    # A second, real Windows Startup-folder entry makes startup resilient even
+    # when security software ignores a Run-key entry.
     try:
-        key=winreg.CreateKey(winreg.HKEY_CURRENT_USER,RUN_KEY)
-        if enabled:
-            winreg.SetValueEx(key,RUN_NAME,0,winreg.REG_SZ,_center_startup_command())
-        else:
-            try: winreg.DeleteValue(key,RUN_NAME)
-            except FileNotFoundError: pass
-        winreg.CloseKey(key)
-        return center_startup_enabled()==bool(enabled)
+        os.makedirs(_startup_folder(),exist_ok=True)
+        with open(_startup_cmd_file(),'w',encoding='utf-8',newline='\r\n') as f:
+            f.write('@echo off\r\nstart "" '+_center_startup_command()+'\r\n')
+        return os.path.isfile(_startup_cmd_file())
     except Exception:
         return False
 
+def _remove_startup_folder_entry():
+    try:
+        if os.path.isfile(_startup_cmd_file()): os.remove(_startup_cmd_file())
+    except Exception: pass
+
+def set_center_startup(enabled):
+    import winreg
+    registry_ok=False
+    try:
+        key=winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER,RUN_KEY,0,winreg.KEY_SET_VALUE|winreg.KEY_QUERY_VALUE)
+        if enabled:
+            winreg.SetValueEx(key,RUN_NAME,0,winreg.REG_SZ,_center_startup_command())
+            registry_ok=True
+        else:
+            try: winreg.DeleteValue(key,RUN_NAME)
+            except FileNotFoundError: pass
+            registry_ok=True
+        winreg.CloseKey(key)
+    except Exception:
+        registry_ok=False
+    if enabled:
+        folder_ok=_write_startup_folder_entry()
+        return registry_ok and folder_ok and center_startup_enabled()
+    _remove_startup_folder_entry()
+    return registry_ok and not center_startup_enabled()
+
 def center_startup_enabled():
     import winreg,re
+    reg_ok=False
     try:
         key=winreg.OpenKey(winreg.HKEY_CURRENT_USER,RUN_KEY,0,winreg.KEY_READ)
         cmd=str(winreg.QueryValueEx(key,RUN_NAME)[0]).strip(); winreg.CloseKey(key)
         quoted=re.findall(r'"([^"]+)"',cmd)
         target=quoted[0] if quoted else cmd.split()[0]
-        return os.path.isfile(target)
+        reg_ok=bool(target and os.path.isfile(target))
     except Exception:
-        return False
+        reg_ok=False
+    folder_ok=os.path.isfile(_startup_cmd_file())
+    return reg_ok and folder_ok
 
 def load_settings():
     data = dict(DEFAULTS)
