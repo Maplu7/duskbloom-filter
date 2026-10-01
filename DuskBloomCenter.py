@@ -483,7 +483,16 @@ class MainFrame(wx.Frame):
         self.content=wx.ScrolledWindow(self,style=wx.VSCROLL); self.content.SetScrollRate(0,12); self.content.SetBackgroundColour(self.bg)
         self.root.Add(self.content,1,wx.EXPAND); self.SetSizer(self.root)
         self.make_tray(); self.Bind(wx.EVT_CLOSE,self.on_close)
-        self.show_page('Home'); self.Centre(); self.Show()
+        # First packaged launch registers the real per-user Windows startup entries.
+        # We verify both the HKCU Run key and Startup-folder launcher before showing it as enabled.
+        if self.settings.get('start_with_windows',True) and not center_startup_enabled():
+            set_center_startup(True)
+        self.settings['start_with_windows']=center_startup_enabled(); save_settings(self.settings)
+        self.show_page('Home'); self.Centre()
+        if '--startup' in sys.argv:
+            self.Hide()
+        else:
+            self.Show()
 
     def set_palette(self):
         t=THEMES[self.settings['theme']]
