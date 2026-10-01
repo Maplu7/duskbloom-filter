@@ -125,7 +125,7 @@ DEFAULT_SETTINGS = {
 
 PRESETS = {
     "Cozy":    {"filter": "dusty_rose", "intensity": "9",  "white_point_killer": False},
-    "Migraine":{"filter": "obsidian",   "intensity": "20", "white_point_killer": True},
+    "Migraine":{"filter": "obsidian",   "intensity": "18", "white_point_killer": True},
     "Reading": {"filter": "warm_white", "intensity": "7",  "white_point_killer": False},
     "Night":   {"filter": "midnight",   "intensity": "12", "white_point_killer": True},
     "Movie":   {"filter": "smoke",      "intensity": "8",  "white_point_killer": False},
@@ -136,7 +136,7 @@ PRESETS = {
 MODES = {
     "Everyday": ("dusty_rose", "8", False),
     "Reading":  ("warm_white", "7", False),
-    "Migraine": ("obsidian", "20", True),
+    "Migraine": ("obsidian", "18", True),
     "Night":    ("midnight", "12", True),
     "Movie":    ("smoke", "8", False),
     "Gaming":   ("navy", "6", False),
